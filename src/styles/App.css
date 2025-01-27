@@ -302,13 +302,3 @@ button:active {
     margin-left: auto;
     margin-right: auto;
 }
-.footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #f0f0f0; /* Optional background */
-}
-
-.footer-image {
-    max-width: 100%; /* Make it responsive */
-    height: auto;
-}
