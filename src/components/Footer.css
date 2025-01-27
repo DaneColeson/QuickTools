@@ -5,6 +5,8 @@
 }
 
 .footer-image {
-    max-width: 10%; /* Make it responsive */
-    height: auto;
+    max-width: 10%; /* Ensures the image doesn't exceed its container width */
+    height: auto; /* Maintains aspect ratio */
+    display: block; /* Removes unwanted inline spacing */
+    margin: 0 auto; /* Centers the image if needed */
 }
