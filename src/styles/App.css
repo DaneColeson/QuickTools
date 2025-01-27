@@ -1,0 +1,314 @@
+/* Universal Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Headings */
+h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+}
+
+/* Icon Grid */
+.icon-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Icon Buttons */
+.icon {
+    display: flex;
+    text-align: left;
+    align-items: left;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    background: white;
+    border: 4px solid white;
+    border-radius: 36px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    color: #c7c7c7;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    gap: flex; /* Space between icon and text */
+}
+
+/* Subtext Styling */
+.icon .subtext {
+    font-size: 0.75rem; /* Smaller than main text */
+    font-style: italic; /* Italicize the subtext */
+    color: #666; /* Subtle color for subtext */
+    margin-top: 10px; /* Space between main text and subtext */
+    text-align: left; /* Center-align the subtext */
+    line-height: 1.2; /* Slightly tighter line spacing */
+}
+
+
+.icon span {
+    font-size: 1rem;
+    color: #333;
+    font-weight: regular;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Accent Bar for Icons */
+.icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, #d1424a, #b0373e);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+.icon-red::before {
+    background: linear-gradient(150deg, #d72cac, #fbf059);
+}
+
+.icon-blue::before {
+    background: linear-gradient(90deg, #007c3e, #73fdef);
+}
+
+.icon-green::before {
+    background: linear-gradient(90deg, #9600ff, #aebaf8, #e3e6f7);
+}
+
+.icon-purple::before {
+    background: linear-gradient(120deg, #8e44ad, #74ffb9); /* Purple gradient */
+}
+
+.icon-orange::before {
+    background: linear-gradient(120deg, #c76713, #938eff); /* Orange gradient */
+}
+/* HemmingCalculator and Machine Recommender */
+.HemmingCalculator {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.HemmingCalculator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background: linear-gradient(90deg, #9600ff, #aebaf8, #e3e6f7);
+}
+
+
+
+/* Machine Recommender */
+.machine-recommender {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.machine-recommender::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background: linear-gradient(90deg, #007c3e, #73fdef);
+}
+
+
+/* Labels and Inputs */
+label {
+    display: block;
+    font-size: 1rem;
+    margin: 10px 0 5px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    border: 2px solid #b0373e;
+    background: white;
+}
+
+/* Home Button */
+.home-button {
+    display: block;
+    margin: 40px auto;
+    width: fit-content;
+    padding: 8px 20px;
+    font-size: 0.8rem;
+    font-weight: regular;
+    color: white; /* Text color matching the accent */
+    background: rgb(210, 196, 255); /* White background */
+    border: 4px solid white; /* Thick white border */
+    border-radius: 36px; /* Rounded corners */
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative; /* For inner and outer shadow */
+    transition: all 0.3s ease; /* Smooth hover effect */
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2), /* Outer shadow */
+        inset 0 4px 8px rgba(0, 0, 0, 0.3); /* Inner shadow */
+}
+
+/* Buttons */
+button {
+    display: block;
+    width: 50%;
+    padding: 12px;
+    margin: 20px auto 0 auto;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: #6257ff;
+    border: 4px solid white;
+    border-radius: 36px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 4px   rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(209, 66, 74, 0.5);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Result Output */
+.result-output {
+    background: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    white-space: pre-line;
+}
+
+/* Mobile Formatting */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .icon {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .icon span {
+        font-size: 1.2rem;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+
+    .HemmingCalculator,
+    .machine-recommender {
+        padding: 15px;
+    }
+}
+
+.HemmingCalculator label {
+    display: block;
+    font-size: 1rem;
+    color: #333;
+    margin: 15px 0 10px; /* Adjust for spacing */
+}
+
+.HemmingCalculator input,
+.HemmingCalculator select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px; /* Spacing between inputs */
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.HemmingCalculator button {
+    margin-top: 20px; /* Space from last input */
+    display: block;
+    width: 50%; /* Center the button */
+    margin-left: auto;
+    margin-right: auto;
+}
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0; /* Optional background */
+}
+
+.footer-image {
+    max-width: 100%; /* Make it responsive */
+    height: auto;
+}
