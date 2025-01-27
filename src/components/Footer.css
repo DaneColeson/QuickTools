@@ -1,11 +1,11 @@
 .footer {
     text-align: center;
-    padding: 100px;
+    padding: 80px;
     background-color: #f0f0f0; /* Optional background */
 }
 
 .footer-image {
-    max-width: 10%; /* Ensures the image doesn't exceed its container width */
+    max-width: 15%; /* Ensures the image doesn't exceed its container width */
     height: auto; /* Maintains aspect ratio */
     display: block; /* Removes unwanted inline spacing */
     margin: 0 auto; /* Centers the image if needed */

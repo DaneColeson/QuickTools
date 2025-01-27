@@ -72,7 +72,7 @@ const MachineRecommender: React.FC = () => {
     const [thickness, setThickness] = useState<string>(""); // Track selected material thickness
     const [materialType, setMaterialType] = useState<string>(""); // Track selected material type
     const [bendLength, setBendLength] = useState<string>("");
-    const [result, setResult] = useState<string | null>(null);
+    const [result, setResult] = useState<React.ReactNode>(null);
 
     const handleCalculate = () => {
         if (!thickness || !bendLength || !machineType || !materialType) {
@@ -115,18 +115,24 @@ const MachineRecommender: React.FC = () => {
     
         if (recommendedMachine) {
             setResult(
-                `Material Type: ${materialType}\n` +
-                `V-Die Size: ${vDieSize} inches\n` +
-                `Adjusted Tons/Foot: ${adjustedTonsPerFoot.toFixed(2)} tons\n` +
-                `Total Bend Length: ${bendLength} inches (${lengthInMeters.toFixed(2)} meters)\n` +
-                `Total Tonnage Required: ${totalTonnage.toFixed(2)} tons\n` +
-                `Recommended Machine: ${recommendedMachine.name} (Capacity: ${recommendedMachine.capacity} tons, Length: ${recommendedMachine.length} inches)`
+                <>
+                    <div>V-Die Size: {vDieSize} inches</div>
+                    <div>Adjusted Tons/Foot: {adjustedTonsPerFoot.toFixed(2)} tons</div>
+                    <div>Total Bend Length: {lengthInMeters.toFixed(2)} meters</div>
+                    <div>Total Tonnage Required: {totalTonnage.toFixed(2)} tons</div>
+                    <div>
+                        <strong>
+                            Recommended Machine: {recommendedMachine.name} (Capacity: {recommendedMachine.capacity} tons, Length:{" "}
+                            {recommendedMachine.length} inches)
+                        </strong>
+                    </div>
+                </>
             );
         } else {
             setResult("No suitable machine available for the given requirements.");
         }
+
     };
-    
 
     return (
         <div className="Machine-Recommender">
@@ -148,10 +154,10 @@ const MachineRecommender: React.FC = () => {
                 Material Type
                 <select value={materialType} onChange={(e) => setMaterialType(e.target.value)}>
                     <option value="">Select...</option>
-                    <option value="Mild Steel">Mild Steel</option>
-                    <option value="Aluminum">Aluminum</option>
-                    <option value="Stainless Steel">Stainless Steel</option>
-                    <option value="High Strength Steel">High Strength Steel</option>
+                    <option value="Mild Steel">Mild Steel (x1.0)</option>
+                    <option value="Aluminum">Aluminum (x0.5)</option>
+                    <option value="Stainless Steel">Stainless Steel (x1.5)</option>
+                    <option value="High Strength Steel">High Strength Steel (x2.5)</option>
                 </select>
             </label>
 

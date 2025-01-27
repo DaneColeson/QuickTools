@@ -6,7 +6,7 @@ const materialMultipliers = {
     MildSteel: 1,
     Aluminum: 0.5,
     StainlessSteel: 1.5,
-    HighStrengthSteel: 2.75,
+    HighStrengthSteel: 2.5,
 };
 
 // Predefined material thickness options
@@ -32,6 +32,30 @@ const materialThicknesses = [
     "1.500",
     "2.000",
 ];
+
+// Predefined recommended V-die sizes for each material thickness
+const recommendedVDies: { [key: string]: string[] } = {
+    "0.036": ["0.236"],
+    "0.048": ["0.315"],
+    "0.060": ["0.394"],
+    "0.075": ["0.472"],
+    "0.090": ["0.551"],
+    "0.105": ["0.630"],
+    "0.120": ["0.984"],
+    "0.135": ["0.984"],
+    "0.150": ["1.260"],
+    "0.188": ["1.575"],
+    "0.250": ["1.969"],
+    "0.313": ["2.480"],
+    "0.375": ["3.937"],
+    "0.500": ["4.921"],
+    "0.625": ["7.874"],
+    "0.750": ["9.843"],
+    "1.000": ["11.811"],
+    "1.250": ["15.748"],
+    "1.500": ["17.717"],
+    "2.000": ["23.622"],
+};
 
 // Predefined V-die sizes
 const vDieSizes = [
@@ -99,13 +123,11 @@ const TonnageCalculator: React.FC = () => {
         const totalTonnage = adjustedTonsPerFoot * lengthInFeet;
 
         // Get recommended V-die
-        const recommendedDie = vDieSizes.find(
-            (die) => parseFloat(die) >= thicknessNum * 4 && parseFloat(die) <= thicknessNum * 15
-        );
+        const recommendedDie = recommendedVDies[thickness]?.[0] || "No recommendation available";
 
         // Display the results
         setResult(
-            `Recommended V-Die Size: ${recommendedDie || "No recommendation available"}\n` +
+            `Recommended V-Die Size: ${recommendedDie}\n` +
             `Tons per Foot: ${adjustedTonsPerFoot.toFixed(2)} tons\n` +
             `Total Bend Length: ${(bendLengthNum * 0.0254).toFixed(2)} meters\n` +
             `Total Tonnage Required: ${totalTonnage.toFixed(2)} tons`
@@ -137,32 +159,29 @@ const TonnageCalculator: React.FC = () => {
                     <option value="MildSteel">Mild Steel (x1.0)</option>
                     <option value="Aluminum">Aluminum (x0.5)</option>
                     <option value="StainlessSteel">Stainless Steel (x1.5)</option>
-                    <option value="HighStrengthSteel">High Strength Steel (x2.75)</option>
+                    <option value="HighStrengthSteel">High Strength Steel (x2.5)</option>
                 </select>
             </label>
 
             <label>
-    V-Die Size
-    <select value={vDieSize} onChange={(e) => setVDieSize(e.target.value)}>
-        <option value="">Select...</option>
-        {filteredVDies.map((die) => {
-            const isRecommended = parseFloat(die) >= parseFloat(thickness) * 8 && parseFloat(die) <= parseFloat(thickness) * 10;
-            return (
-                <option
-                    key={die}
-                    value={die}
-                    style={{
-                        backgroundColor: isRecommended ? "#ffeeba" : "white", // Highlight recommended V-die with a yellow background
-                        fontWeight: isRecommended ? "bold" : "normal", // Make it bold for emphasis
-                    }}
-                >
-                    {die} {isRecommended ? "(Recommended)" : ""}
-                </option>
-            );
-        })}
-    </select>
-</label>
-
+                V-Die Size
+                <select value={vDieSize} onChange={(e) => setVDieSize(e.target.value)}>
+                    <option value="">Select...</option>
+                    {filteredVDies.map((die) => (
+                        <option
+                            key={die}
+                            value={die}
+                            style={{
+                                backgroundColor:
+                                    recommendedVDies[thickness]?.includes(die) ? "#ffeeba" : "white", // Highlight recommended V-die
+                                fontWeight: recommendedVDies[thickness]?.includes(die) ? "bold" : "normal",
+                            }}
+                        >
+                            {die} {recommendedVDies[thickness]?.includes(die) ? "(Recommended)" : ""}
+                        </option>
+                    ))}
+                </select>
+            </label>
 
             <label>
                 Total Bend Length (inches)
