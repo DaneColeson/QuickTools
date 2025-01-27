@@ -1,6 +1,6 @@
-# My React App
+# Press Brake Quick Tools
 
-This is a simple React application built with TypeScript. It serves as a template for creating scalable and maintainable web applications.
+This is a collection of calculators for Press Brake Applications and Sales
 
 ## Project Structure
 
