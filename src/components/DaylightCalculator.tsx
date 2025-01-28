@@ -12,24 +12,42 @@ const machines = {
 const upperClampingOptions = [
   { label: "European", height: 150 },
   { label: "American Manual", height: 150 },
-  { label: "American Hydraulic", height: 70 },
-  { label: "WT/New Standard", height: 60 },
+  { label: "American - 1000 Series", height: 91.4 },
+  { label: "American - 2000 Series", height: 91.4 },
+  { label: "WT - 1000 Series", height: 62 },
+  { label: "WT - 2000 Series", height: 62 },
 ];
 
 const lowerClampingOptions = [
-  { label: "European - Die Holder - 28mm", height: 28 },
+  { label: "European - Die Holder", height: 28 },
   { label: "European - Die Holder - 50mm", height: 50 },
-  { label: "American Manual - Die Holder", height: 0 },
-  { label: "American Hydraulic - Die Holder - 98mm", height: 98 },
-  { label: "WT/New Standard - Die Holder - 110mm", height: 110 },
+  { label: "American Manual - Die Holder", height: 50.8 },
+  { label: "American - 1000 Series", height: 55 },
+  { label: "American - 2000 Series", height: 55 },
+  { label: "WT - 1000 Series", height: 55 },
+  { label: "WT - 2000 Series", height: 55 },
 ];
 
 type MachineType = keyof typeof machines;
 
+const commonPunchHeights = {
+  European: [80, 90, 100],
+  "American Manual": [75, 85, 95],
+  "American - 1000 Series": [70, 80, 90],
+  "WT - 1000 Series": [60, 70, 80],
+};
+
+const commonDieHeights = {
+  European: [28, 50, 75],
+  "American Manual": [50.8, 75, 100],
+  "American - 1000 Series": [55, 70, 85],
+  "WT - 1000 Series": [55, 70, 85],
+};
+
 const DaylightCalculator: React.FC = () => {
   const [machineType, setMachineType] = useState<MachineType>("BB");
-  const [upperClamping, setUpperClamping] = useState(upperClampingOptions[0].height);
-  const [lowerClamping, setLowerClamping] = useState(lowerClampingOptions[0].height);
+  const [upperClamping, setUpperClamping] = useState<keyof typeof commonPunchHeights>(upperClampingOptions[0].label as keyof typeof commonPunchHeights);
+  const [lowerClamping, setLowerClamping] = useState<keyof typeof commonDieHeights>(lowerClampingOptions[0].label as keyof typeof commonDieHeights);
   const [punchHeight, setPunchHeight] = useState<string>("");
   const [dieHeight, setDieHeight] = useState<string>("");
   const [additionalHeight, setAdditionalHeight] = useState<number>(0);
@@ -50,10 +68,12 @@ const DaylightCalculator: React.FC = () => {
     }
 
     const machine = machines[machineType];
+    const upperClampHeight = upperClampingOptions.find((clamp) => clamp.label === upperClamping)?.height || 0;
+    const lowerClampHeight = lowerClampingOptions.find((clamp) => clamp.label === lowerClamping)?.height || 0;
 
     // Calculate available open height
     const availableOpenHeight =
-      machine.openHeight - (upperClamping + lowerClamping) + additionalHeight;
+      machine.openHeight - (upperClampHeight + lowerClampHeight) + (machineType === "PA" ? 0 : additionalHeight);
 
     // Calculate daylight
     const daylight = availableOpenHeight - (punchHeightNum + dieHeightNum);
@@ -98,10 +118,10 @@ const DaylightCalculator: React.FC = () => {
         Upper Clamping Style
         <select
           value={upperClamping}
-          onChange={(e) => setUpperClamping(parseInt(e.target.value))}
+          onChange={(e) => setUpperClamping(e.target.value as keyof typeof commonPunchHeights)}
         >
           {upperClampingOptions.map((option) => (
-            <option key={option.label} value={option.height}>
+            <option key={option.label} value={option.label}>
               {option.label} ({option.height} mm)
             </option>
           ))}
@@ -112,10 +132,10 @@ const DaylightCalculator: React.FC = () => {
         Lower Clamping Style
         <select
           value={lowerClamping}
-          onChange={(e) => setLowerClamping(parseInt(e.target.value))}
+          onChange={(e) => setLowerClamping(e.target.value as keyof typeof commonDieHeights)}
         >
           {lowerClampingOptions.map((option) => (
-            <option key={option.label} value={option.height}>
+            <option key={option.label} value={option.label}>
               {option.label} ({option.height} mm)
             </option>
           ))}
@@ -142,17 +162,37 @@ const DaylightCalculator: React.FC = () => {
         />
       </label>
 
-      <label>
-        Additional Open Height (mm)
-        <select
-          value={additionalHeight}
-          onChange={(e) => setAdditionalHeight(parseInt(e.target.value))}
-        >
-          <option value={0}>None</option>
-          <option value={100}>+100 mm</option>
-          <option value={200}>+200 mm</option>
-        </select>
-      </label>
+      {machineType !== "PA" && (
+        <label>
+          Additional Open Height (mm)
+          <select
+            value={additionalHeight}
+            onChange={(e) => setAdditionalHeight(parseInt(e.target.value))}
+          >
+            <option value={0}>None</option>
+            <option value={100}>+100 mm</option>
+            <option value={200}>+200 mm</option>
+          </select>
+        </label>
+      )}
+
+      <div>
+        <h3>Common Heights</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Punch Heights (mm)</th>
+              <th>Die Heights (mm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{commonPunchHeights[upperClamping]?.join(", ") || "N/A"}</td>
+              <td>{commonDieHeights[lowerClamping]?.join(", ") || "N/A"}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <button onClick={handleCalculate}>Calculate</button>
 
