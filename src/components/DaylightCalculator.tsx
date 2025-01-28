@@ -8,20 +8,28 @@ const machines = {
   PA: { openHeight: 500, stroke: 200 },
 };
 
-const clampingStyles = {
-  European: { upper: 150, lower: 150 },
-  "American Manual": { upper: 150, lower: 150 },
-  "American Hydraulic": { upper: 70, lower: 98 },
-  "WT/New Standard": { upper: 60, lower: 110 },
-};
+// Updated clamping styles with detailed heights
+const upperClampingOptions = [
+  { label: "European", height: 150 },
+  { label: "American Manual", height: 150 },
+  { label: "American Hydraulic", height: 70 },
+  { label: "WT/New Standard", height: 60 },
+];
+
+const lowerClampingOptions = [
+  { label: "European - Die Holder - 28mm", height: 28 },
+  { label: "European - Die Holder - 50mm", height: 50 },
+  { label: "American Manual - Die Holder", height: 0 },
+  { label: "American Hydraulic - Die Holder - 98mm", height: 98 },
+  { label: "WT/New Standard - Die Holder - 110mm", height: 110 },
+];
 
 type MachineType = keyof typeof machines;
-type ClampingStyle = keyof typeof clampingStyles;
 
 const DaylightCalculator: React.FC = () => {
   const [machineType, setMachineType] = useState<MachineType>("BB");
-  const [upperClamping, setUpperClamping] = useState<ClampingStyle>("European");
-  const [lowerClamping, setLowerClamping] = useState<ClampingStyle>("European");
+  const [upperClamping, setUpperClamping] = useState(upperClampingOptions[0].height);
+  const [lowerClamping, setLowerClamping] = useState(lowerClampingOptions[0].height);
   const [punchHeight, setPunchHeight] = useState<string>("");
   const [dieHeight, setDieHeight] = useState<string>("");
   const [additionalHeight, setAdditionalHeight] = useState<number>(0);
@@ -35,24 +43,23 @@ const DaylightCalculator: React.FC = () => {
 
     const punchHeightNum = parseFloat(punchHeight);
     const dieHeightNum = parseFloat(dieHeight);
+
     if (isNaN(punchHeightNum) || isNaN(dieHeightNum)) {
       setResult("Invalid punch or die height. Please enter numerical values.");
       return;
     }
 
     const machine = machines[machineType];
-    const upperClamp = clampingStyles[upperClamping].upper;
-    const lowerClamp = clampingStyles[lowerClamping].lower;
 
     // Calculate available open height
     const availableOpenHeight =
-      machine.openHeight - (upperClamp + lowerClamp) + additionalHeight;
+      machine.openHeight - (upperClamping + lowerClamping) + additionalHeight;
 
     // Calculate daylight
     const daylight = availableOpenHeight - (punchHeightNum + dieHeightNum);
 
     // Check for interference
-    const hasInterference = daylight > machine.stroke;
+    const hasInterference = daylight <= machine.stroke;
 
     // Convert to inches (1 mm = 0.03937 inches)
     const availableOpenHeightInches = availableOpenHeight * 0.03937;
@@ -91,11 +98,11 @@ const DaylightCalculator: React.FC = () => {
         Upper Clamping Style
         <select
           value={upperClamping}
-          onChange={(e) => setUpperClamping(e.target.value as ClampingStyle)}
+          onChange={(e) => setUpperClamping(parseInt(e.target.value))}
         >
-          {Object.keys(clampingStyles).map((key) => (
-            <option key={key} value={key}>
-              {key}
+          {upperClampingOptions.map((option) => (
+            <option key={option.label} value={option.height}>
+              {option.label} ({option.height} mm)
             </option>
           ))}
         </select>
@@ -105,11 +112,11 @@ const DaylightCalculator: React.FC = () => {
         Lower Clamping Style
         <select
           value={lowerClamping}
-          onChange={(e) => setLowerClamping(e.target.value as ClampingStyle)}
+          onChange={(e) => setLowerClamping(parseInt(e.target.value))}
         >
-          {Object.keys(clampingStyles).map((key) => (
-            <option key={key} value={key}>
-              {key}
+          {lowerClampingOptions.map((option) => (
+            <option key={option.label} value={option.height}>
+              {option.label} ({option.height} mm)
             </option>
           ))}
         </select>
