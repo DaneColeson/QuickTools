@@ -42,14 +42,14 @@ const BoxBendingCalculator: React.FC = () => {
 
   const handleCalculate = () => {
     if (!boxHeight) {
-        setResult("Please enter a valid box height.");
-        return;
+      setResult("Please enter a valid box height.");
+      return;
     }
 
     const boxHeightNum = parseFloat(boxHeight);
     if (isNaN(boxHeightNum)) {
-        setResult("Invalid box height. Please enter a numerical value.");
-        return;
+      setResult("Invalid box height. Please enter a numerical value.");
+      return;
     }
 
     const ramWidth = ramWidths[machineType] || 0;
@@ -59,18 +59,18 @@ const BoxBendingCalculator: React.FC = () => {
 
     // Determine base open height and apply clamping/die reductions
     const baseOpenHeight = machineType.startsWith("BB")
-        ? openHeights.BB
-        : machineType.startsWith("BH")
-        ? openHeights.BH
-        : openHeights.PA;
+      ? openHeights.BB
+      : machineType.startsWith("BH")
+      ? openHeights.BH
+      : openHeights.PA;
 
     const clampingStyleConfig = clampingStyles[clampingStyle];
     const reducedOpenHeight =
-        baseOpenHeight -
-        clampingStyleConfig.clamp -
-        clampingStyleConfig.die +
-        additionalHeight +
-        punchExtension;
+      baseOpenHeight -
+      clampingStyleConfig.clamp -
+      clampingStyleConfig.die +
+      additionalHeight +
+      punchExtension;
 
     // Calculate daylight
     const daylight = reducedOpenHeight - toolHeight;
@@ -83,13 +83,40 @@ const BoxBendingCalculator: React.FC = () => {
 
     // Display results
     setResult(
-        `Tool Height Requirement: ${toolHeight.toFixed(2)} mm (${toolHeightInches.toFixed(2)} inches)\n` +
+      `Tool Height Requirement: ${toolHeight.toFixed(2)} mm (${toolHeightInches.toFixed(2)} inches)\n` +
         `Total Open Height Available: ${reducedOpenHeight.toFixed(2)} mm (${reducedOpenHeightInches.toFixed(2)} inches)\n` +
         `Available Daylight: ${daylight.toFixed(2)} mm (${daylightInches.toFixed(2)} inches)\n` +
         `Open Height Availability: ${hasSufficientHeight ? "Yes" : "No"}`
     );
-};
+  };
 
+  const renderAdditionalHeight = () => {
+    if (machineType === "PA13530-PA16040" || machineType === "PA22030-PA22040") {
+      return null; // Do not show the dropdown for PA machines
+    }
+    return (
+      <label>
+        Additional Open Height (mm)
+        <select
+          value={additionalHeight}
+          onChange={(e) => setAdditionalHeight(parseInt(e.target.value))}
+        >
+          {machineType === "BB" ? (
+            <>
+              <option value={0}>None</option>
+              <option value={100}>+100mm</option>
+            </>
+          ) : (
+            <>
+              <option value={0}>None</option>
+              <option value={100}>+100mm</option>
+              <option value={200}>+200mm</option>
+            </>
+          )}
+        </select>
+      </label>
+    );
+  };
 
   return (
     <div className="BoxBendingCalculator">
@@ -125,10 +152,10 @@ const BoxBendingCalculator: React.FC = () => {
           value={clampingStyle}
           onChange={(e) => setClampingStyle(e.target.value as ClampingStyle)}
         >
-          <option value="European">European</option>
-          <option value="American Manual">American Manual</option>
-          <option value="WT/New Standard">WT/New Standard</option>
-          <option value="American Hydraulic">American Hydraulic</option>
+          <option value="European">European (150mm)</option>
+          <option value="American Manual">American Manual (150mm)</option>
+          <option value="WT/New Standard">WT/New Standard (70mm)</option>
+          <option value="American Hydraulic">American Hydraulic (60mm)</option>
         </select>
       </label>
 
@@ -139,23 +166,15 @@ const BoxBendingCalculator: React.FC = () => {
           onChange={(e) => setPunchExtension(parseInt(e.target.value))}
         >
           <option value={0}>None</option>
-          <option value={100}>100 mm</option>
-          <option value={150}>150 mm</option>
-          <option value={200}>200 mm</option>
+          <option value={50}>50mm</option>
+          <option value={100}>100mm</option>
+          <option value={150}>150mm</option>
+          <option value={200}>200mm</option>
         </select>
       </label>
 
-      <label>
-        Additional Open Height (mm)
-        <select
-          value={additionalHeight}
-          onChange={(e) => setAdditionalHeight(parseInt(e.target.value))}
-        >
-          <option value={0}>None</option>
-          <option value={100}>+100 mm</option>
-          <option value={200}>+200 mm</option>
-        </select>
-      </label>
+      {/* Conditional rendering of Additional Open Height */}
+      {renderAdditionalHeight()}
 
       <button onClick={handleCalculate}>Calculate</button>
 

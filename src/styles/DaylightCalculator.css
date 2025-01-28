@@ -1,0 +1,131 @@
+/* DaylightCalculator */
+.DaylightCalculator {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white; /* Background color for the container */
+    border: 1px solid #ddd; /* Subtle border around the container */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    position: relative; /* Needed for the accent bar */
+}
+
+/* Accent Bar */
+.DaylightCalculator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background: linear-gradient(90deg, #4200d1, white); /* Gradient for the accent bar */
+}
+
+/* Heading */
+.DaylightCalculator h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333; /* Darker text color for contrast */
+}
+
+/* Labels */
+.DaylightCalculator label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #555; /* Slightly lighter text for labels */
+}
+
+/* Inputs and Selects */
+.DaylightCalculator input[type="number"],
+.DaylightCalculator select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 4px; /* Rounded corners for inputs */
+    background: #f9f9f9; /* Light background for inputs */
+    transition: border-color 0.3s ease; /* Smooth transition on hover/focus */
+}
+
+/* Input/Select Hover and Focus */
+.DaylightCalculator input[type="number"]:hover,
+.DaylightCalculator select:hover {
+    border-color: #004080; /* Highlighted border on hover */
+}
+
+.DaylightCalculator input[type="number"]:focus,
+.DaylightCalculator select:focus {
+    outline: none; /* Remove default outline */
+    border: 2px solid #00aaff; /* Highlighted border on focus */
+    background: #fff; /* Slightly different background on focus */
+}
+
+/* Button */
+.DaylightCalculator button {
+    display: block;
+    width: 50%;
+    padding: 12px;
+    margin: 20px auto 0 auto;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: #6257ff;
+    border: 4px solid white;
+    border-radius: 36px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 4px   rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Button Hover and Focus */
+.DaylightCalculator button:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+}
+
+/* Result Output */
+.DaylightCalculator .result-output {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #333; /* Dark text for result */
+    background: #f9f9f9; /* Light background for result container */
+    padding: 15px;
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    white-space: pre-line; /* Keep line breaks */
+}
+
+/* Home Button */
+.DaylightCalculator .home-button {
+    display: block;
+    margin: 40px auto;
+    width: fit-content;
+    padding: 8px 20px;
+    font-size: 0.8rem;
+    font-weight: regular;
+    color: white; /* Text color matching the accent */
+    background: rgb(210, 196, 255); /* White background */
+    border: 4px solid white; /* Thick white border */
+    border-radius: 36px; /* Rounded corners */
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative; /* For inner and outer shadow */
+    transition: all 0.3s ease; /* Smooth hover effect */
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2), /* Outer shadow */
+        inset 0 4px 8px rgba(0, 0, 0, 0.3); /* Inner shadow */
+}
+
+/* Home Button Hover */
+.DaylightCalculator .home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+
+}

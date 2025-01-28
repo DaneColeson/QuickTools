@@ -37,7 +37,7 @@ const Home: React.FC = () => (
             <div className="subtext">Determine maximum box size depending on tooling</div>
         </div>
 </Link>
-<Link to="/tonnage-calculator" className="icon icon-blue">
+<Link to="/daylight-calculator" className="icon icon-blue">
     <div className="accent-bar"></div>
     <div>
             <span><b>Daylight Calculator</b></span>
