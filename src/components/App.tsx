@@ -7,9 +7,17 @@ import MachineRecommender from "./MachineRecommender";
 import TonnageCalculator from "./TonnageCalculator";
 import DaylightCalculator from "./DaylightCalculator"; // New page
 import BoxBending from "./BoxBending"; // New page
+// Optional NotFound component
+const NotFound: React.FC = () => (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <h2>404 - Page Not Found</h2>
+        <p>The page you are looking for does not exist.</p>
+    </div>
+);
 
 const App: React.FC = () => (
-        <Router>
+    <Router>
+        <div className="app-container"> {/* Wrapper for consistent global styling */}
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/hemming-tonnage" component={HemmingCalculator} />
@@ -17,9 +25,11 @@ const App: React.FC = () => (
                 <Route path="/tonnage-calculator" component={TonnageCalculator} />
                 <Route path="/daylight-calculator" component={DaylightCalculator} />
                 <Route path="/box-bending" component={BoxBending} />
+                <Route component={NotFound} /> {/* Fallback for unmatched paths */}
             </Switch>
-            <Footer /> {/* Footer globally added here */}
-        </Router>
+            <Footer />
+        </div>
+    </Router>
 );
 
 export default App;

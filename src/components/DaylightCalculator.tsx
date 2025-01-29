@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../styles/DaylightCalculator.css";
+import "../styles/App.css";
 
 const machines = {
   BB: { openHeight: 430, stroke: 150 },

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import "../styles/App.css";
 
 // Define the type for V-die options
 type VDieOptions = {
@@ -135,7 +136,7 @@ const MachineRecommender: React.FC = () => {
     };
 
     return (
-        <div className="Machine-Recommender">
+        <div className="MachineRecommender">
             <h2>Machine Recommender</h2>
 
             <label>
