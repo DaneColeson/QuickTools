@@ -35,7 +35,6 @@ body {
     align-items: center;
     background-color: #f9f9f9;
     padding: 10px 0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;
@@ -108,32 +107,40 @@ button:hover {
     white-space: pre-line;
 }
 
-/* --- Icon Grid for Home Page --- */
+/* --- Icon Grid for Home Page (Single Column Layout) --- */
 .icon-grid {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+    flex-direction: column; /* Aligns items in a single column */
+    align-items: center; /* Centers items horizontally */
+    gap: 15px; /* Space between items */
+    width: 100%;
+    max-width: 350px; /* Adjust as needed for a more centered look */
+    margin: 0 auto; /* Centers the column on the page */
 }
 
 /* --- Icons as White Buttons with Accent Bar --- */
 .icon {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stack content vertically inside button */
     align-items: center;
     justify-content: center;
     text-align: center;
     width: 100%;
-    max-width: 300px;
     padding: 20px;
     background: white;
     border-radius: 16px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-decoration: none;
     color: #333;
-    position: relative; /* Needed for accent bar */
+    position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    overflow: hidden; /* Keeps accent bar inside button */
+    overflow: hidden;
+}
+
+/* --- Hover Effects --- */
+.icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* --- Accent Bar at the Top of Each Button --- */
