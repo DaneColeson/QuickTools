@@ -19,8 +19,8 @@ const upperClampingOptions = [
 ];
 
 const lowerClampingOptions = [
-  { label: "European - Die Holder", height: 28 },
-  { label: "European - Die Holder - 50mm", height: 50 },
+  { label: "European - 1v Die Holder", height: 28 },
+  { label: "European - Large 1v Die Holder", height: 50 },
   { label: "American Manual - Die Holder", height: 50.8 },
   { label: "American - 1000 Series", height: 55 },
   { label: "American - 2000 Series", height: 55 },
@@ -31,17 +31,20 @@ const lowerClampingOptions = [
 type MachineType = keyof typeof machines;
 
 const commonPunchHeights = {
-  European: [80, 90, 100],
-  "American Manual": [75, 85, 95],
-  "American - 1000 Series": [70, 80, 90],
-  "WT - 1000 Series": [60, 70, 80],
+  European: [66, 105, 120, 160],
+  "American Manual": [95, 145, 222],
+  "American - 1000 Series": [95, 145, 222],
+  "WT - 1000 Series": [120, 163, 220],
+  "WT - 2000 Series": [120, 163, 220]
 };
 
 const commonDieHeights = {
-  European: [28, 50, 75],
-  "American Manual": [50.8, 75, 100],
-  "American - 1000 Series": [55, 70, 85],
-  "WT - 1000 Series": [55, 70, 85],
+  "European - 1v Die Holder": [28, 50, 75],
+  "European - Large 1v Die Holder": [50, 60],
+  "American Manual": [40, 60, 80, 100],
+  "American - 1000 Series": [40, 60, 80, 100],
+  "WT - 1000 Series": [55, 100],
+  "WT - 2000 Series": [55, 100]
 };
 
 const DaylightCalculator: React.FC = () => {
