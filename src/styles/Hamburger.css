@@ -1,0 +1,70 @@
+/* --- Hamburger Menu Container --- */
+.hamburger-menu {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    background: transparent;
+    box-shadow: none !important;
+}
+
+/* --- Hamburger Button (Smaller & Top-Left) --- */
+.hamburger-icon {
+    font-size: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007aff; /* iOS blue */
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none !important;
+}
+
+/* --- Menu Container --- */
+.menu {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    width: 25%;
+    height: 50vh;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 10000;
+    transition: none;
+    box-shadow: none !important;
+}
+
+/* --- Menu Items (No Shadow & No Movement) --- */
+.menu a {
+    padding: 10px 15px;
+    font-size: 1rem;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s ease-in-out;
+}
+
+/* --- No Hover Transform Effect --- */
+.menu a:hover {
+    background: #f0f0f0;
+    transform: none !important;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .hamburger-icon {
+        font-size: 28px;
+        top: 10px;
+        left: 10px;
+    }
+
+    .menu {
+        width: 180px;
+    }
+}

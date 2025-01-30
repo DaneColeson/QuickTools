@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/App.css";
+import HamburgerMenu from "../components/HamburgerMenu"; // Import Menu
+
+  
 
 const machines = {
   BB: { openHeight: 430, stroke: 150 },
@@ -48,6 +51,7 @@ const commonDieHeights = {
 };
 
 const DaylightCalculator: React.FC = () => {
+
   const [machineType, setMachineType] = useState<MachineType>("BB");
   const [upperClamping, setUpperClamping] = useState<keyof typeof commonPunchHeights>(upperClampingOptions[0].label as keyof typeof commonPunchHeights);
   const [lowerClamping, setLowerClamping] = useState<keyof typeof commonDieHeights>(lowerClampingOptions[0].label as keyof typeof commonDieHeights);
@@ -55,6 +59,7 @@ const DaylightCalculator: React.FC = () => {
   const [dieHeight, setDieHeight] = useState<string>("");
   const [additionalHeight, setAdditionalHeight] = useState<number>(0);
   const [result, setResult] = useState<string | null>(null);
+
 
   const handleCalculate = () => {
     if (!punchHeight || !dieHeight) {
@@ -91,16 +96,15 @@ const DaylightCalculator: React.FC = () => {
     setResult(
       `Available Open Height: ${availableOpenHeight.toFixed(2)} mm (${availableOpenHeightInches.toFixed(
         2
-      )} inches)\n` +
-        `Available Daylight: ${daylight.toFixed(2)} mm (${daylightInches.toFixed(
-          2
-        )} inches)\n` +
-        `Stroke Interference: ${hasInterference ? "Yes" : "No"}`
+      )} inches)\nAvailable Daylight: ${daylight.toFixed(2)} mm (${daylightInches.toFixed(
+        2
+      )} inches)\nStroke Interference: ${hasInterference ? "Yes" : "No"}`
     );
   };
 
   return (
     <div className="DaylightCalculator">
+      <HamburgerMenu /> {/* Menu */}
       <h2>Daylight Calculator</h2>
 
       <label>

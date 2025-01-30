@@ -5,8 +5,9 @@
 }
 
 .footer-image {
-    max-width: 15%; /* Ensures the image doesn't exceed its container width */
+    max-width: 200px; /* Ensures the image doesn't exceed its container width */
     height: auto; /* Maintains aspect ratio */
+    width: auto; /* Ensures the image doesn't exceed its container width */
     display: block; /* Removes unwanted inline spacing */
     margin: 0 auto; /* Centers the image if needed */
 }

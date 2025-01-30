@@ -14,18 +14,26 @@ body {
     text-rendering: optimizeLegibility;
 }
 
-/* --- Layout Containers --- */
+/* --- Global Layout for Full-Screen Scaling --- */
 .container {
-    max-width: 100%;
-    margin: 0 auto;
+    max-width: 100vw; /* Ensure it scales to full width */
+    min-height: 100vh; /* Ensure it takes full screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
 }
 
+/* --- Ensure Home Page Takes Full Screen Width --- */
 .home-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    padding-bottom: 70px; /* Space for the tab bar */
+    align-items: center;
+    justify-content: center; /* Center content */
+    width: 100%;
+    min-height: 100vh; /* Full height */
+    padding: 20px;
 }
 
 /* --- Navigation Bar --- */
@@ -114,8 +122,9 @@ button:hover {
     align-items: center; /* Centers items horizontally */
     gap: 15px; /* Space between items */
     width: 100%;
-    max-width: 350px; /* Adjust as needed for a more centered look */
+    max-width: 100%; /* Adjust as needed for a more centered look */
     margin: 0 auto; /* Centers the column on the page */
+    font-size: 1rem; /*Ensures text is legible on mobile */
 }
 
 /* --- Icons as White Buttons with Accent Bar --- */
@@ -189,7 +198,9 @@ button:hover {
 .TonnageCalculator,
 .BoxBendingCalculator,
 .DaylightCalculator {
+    width: 90%;
     max-width: 600px;
+    margin-top: 80px;
     margin: 20px auto;
     padding: 20px;
     background: white;
@@ -231,5 +242,74 @@ button:hover {
 
     .result-output {
         padding: 10px;
+    }
+}
+
+/* --- Hamburger Menu Container --- */
+.hamburger-menu {
+    position: fixed;
+    top: 0px;
+    left: 10px;
+    z-index: 9999;
+    margin-bottom: 100px;
+    box-shadow: none;
+}
+
+/* --- Hamburger Button (Smaller & Top-Left) --- */
+.hamburger-icon {
+    font-size: 22px;  /* Smaller icon size */
+    background: none;
+    border-radius: 0px;
+    border: none;
+    cursor: pointer;
+    color: #007aff; /* iOS blue */
+    padding: 30px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* --- Fullscreen Background When Menu is Open --- */
+.menu {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    width: 25%;
+    height: 50vh; /* Covers the entire screen */
+    background: rgba(255, 255, 255, 0.95); /* White with slight transparency */
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    z-index: 10000; /* Ensures it’s above other elements */
+    transition: none;
+}
+
+/* --- Menu Items --- */
+.menu a {
+    padding: 10px 15px;
+    font-size: 1rem;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+.menu a:hover {
+    background: #f0f0f0;
+    transform: translate(0px, -0px);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .hamburger-icon {
+        font-size: 28px;
+        top: 10px;
+        left: 10px;
+    }
+
+    .menu {
+        width: 180px;
     }
 }

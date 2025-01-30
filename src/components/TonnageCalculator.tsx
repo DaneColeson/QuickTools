@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import HamburgerMenu from "../components/HamburgerMenu"; // Import Menu
 
 // Material multipliers
 const materialMultipliers = {
@@ -136,6 +137,7 @@ const TonnageCalculator: React.FC = () => {
 
     return (
         <div className="HemmingCalculator">
+            <HamburgerMenu />
             <h2>Tonnage Calculator</h2>
 
             <label>

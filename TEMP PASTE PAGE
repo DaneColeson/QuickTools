@@ -45,3 +45,31 @@ const App: React.FC = () => (
 );
 
 export default App;
+
+
+
+
+/* --- Menu Container --- */
+.menu {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 220px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+/* --- Menu Items --- */
+.menu a {
+    padding: 12px 15px;
+    font-size: 1rem;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+}
