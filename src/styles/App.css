@@ -54,7 +54,7 @@ h1, h2 {
     text-align: center;
     margin: 20px 0;
     color: #333;
-    font-weight: 600;
+    font-weight:bold;
 }
 
 /* --- Form Labels & Inputs --- */
@@ -130,10 +130,10 @@ button:hover {
 /* --- Icons as White Buttons with Accent Bar --- */
 .icon {
     display: flex;
-    flex-direction: column; /* Stack content vertically inside button */
+    flex-direction: row; /* Stack content vertically inside button */
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: left;
+    text-align: left;
     width: 100%;
     padding: 20px;
     background: white;
@@ -146,6 +146,12 @@ button:hover {
     overflow: hidden;
 }
 
+/* --- Ensure Icons Stay Fixed Size --- */
+.icon svg {
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0; /* Prevents resizing */
+}
 /* --- Hover Effects --- */
 .icon:hover {
     transform: translateY(-2px);
@@ -182,13 +188,17 @@ button:hover {
     font-size: 1rem;
     font-weight: bold;
     color: #333;
+    padding: 0 20px;
 }
 
 .icon .subtext {
     font-size: 0.9rem;
     color: #666;
-    margin-top: 8px;
+    margin-top: 4px;
     line-height: 1.2;
+    padding: 0 20px;
+    word-wrap: break-word;
+    overflow-wrap:break-word;
 
 }
 
