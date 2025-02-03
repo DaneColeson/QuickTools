@@ -7,6 +7,7 @@ import MachineRecommender from "./MachineRecommender";
 import TonnageCalculator from "./TonnageCalculator";
 import DaylightCalculator from "./DaylightCalculator"; // New page
 import BoxBending from "./BoxBending"; // New page
+
 // Optional NotFound component
 const NotFound: React.FC = () => (
     <div style={{ textAlign: "center", marginTop: "50px" }}>

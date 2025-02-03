@@ -4,8 +4,7 @@ import Footer from "./Footer";
 import "../styles/App.css"
 import { default as MachineRecommenderIcon } from "../assets/MachineRecommenderIcon";
 import { default as BoxIcon } from "../assets/BoxIcon";
-
-<BoxIcon />
+import { default as HemmingIcon } from "../assets/HemmingIcon";
 
 const Home: React.FC = () => (
     <div className="home-container">
@@ -18,7 +17,7 @@ const Home: React.FC = () => (
         <main className="content">
             <div className="icon-grid">
                 <Link to="/hemming-tonnage" className="icon icon-red">
-                <MachineRecommenderIcon width={50} height={50} />
+                <HemmingIcon width={50} height={50} />
                     <div className="icon-content">
                         <span><b>Hemming Tonnage</b></span>
                         <div className="subtext">Calculate hemming tonnage based on material and hem type</div>
