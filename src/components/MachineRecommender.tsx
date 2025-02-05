@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import "../styles/App.css";
-import HamburgerMenu from "../components/HamburgerMenu"; // Import Menu
 
 // Define the type for V-die options
 type VDieOptions = {
@@ -138,7 +137,6 @@ const MachineRecommender: React.FC = () => {
 
     return (
         <div className="MachineRecommender">
-            <HamburgerMenu /> {/* Menu */}
             <h2>Machine Recommender</h2>
 
             <label>

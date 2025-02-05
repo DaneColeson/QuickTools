@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link for navigation
 import '../styles/App.css';
-import HamburgerMenu from "./HamburgerMenu";
 
 const HemmingCalculator: React.FC = () => {
     const [materialThickness, setMaterialThickness] = useState(".024");
@@ -37,7 +36,6 @@ const HemmingCalculator: React.FC = () => {
 
     return (
         <div className="HemmingCalculator">
-            <HamburgerMenu /> {/* Menu */}
             <h2>Hemming Tonnage Calculator</h2>
             <label htmlFor="material-thickness">Material Thickness</label>
             <select

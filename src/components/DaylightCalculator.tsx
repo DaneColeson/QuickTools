@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/App.css";
-import HamburgerMenu from "../components/HamburgerMenu"; // Import Menu
 
   
 
@@ -104,7 +103,6 @@ const DaylightCalculator: React.FC = () => {
 
   return (
     <div className="DaylightCalculator">
-      <HamburgerMenu /> {/* Menu */}
       <h2>Daylight Calculator</h2>
 
       <label>
