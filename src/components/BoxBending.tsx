@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/App.css";
-
+import { useUnit } from "./UnitContext"; // ✅ Import global unit context
 
 const ramWidths = {
   BB: 50,
@@ -17,11 +17,11 @@ const openHeights = {
   PA: 500,
 };
 
-const clampingStyles: { [key in ClampingStyle]: { clamp: number; die: number } } = {
+const clampingStyles = {
   "European": { clamp: 150, die: 60 },
   "American Manual": { clamp: 150, die: 93 },
-  "American Hydraulic": { clamp: 70, die: 98 },
-  "WT/New Standard": { clamp: 60, die: 110 },
+  "American Hydraulic": { clamp: 91.4, die: 98 },
+  "WT/New Standard": { clamp: 62, die: 110 },
 };
 
 type MachineType =
@@ -34,12 +34,23 @@ type MachineType =
 type ClampingStyle = "European" | "American Manual" | "American Hydraulic" | "WT/New Standard";
 
 const BoxBendingCalculator: React.FC = () => {
+  const { unit, toggleUnit } = useUnit(); // ✅ Use the global unit context
+
   const [clampingStyle, setClampingStyle] = useState<ClampingStyle>("European");
   const [machineType, setMachineType] = useState<MachineType>("BB");
   const [boxHeight, setBoxHeight] = useState<string>("");
   const [punchExtension, setPunchExtension] = useState<number>(0);
   const [additionalHeight, setAdditionalHeight] = useState<number>(0);
   const [result, setResult] = useState<string | null>(null);
+
+  const conversionFactor = unit === "in" ? 0.03937 : 1;
+  const unitLabel = unit === "in" ? "inches" : "mm";
+
+  // Generate punch extension values dynamically based on the unit
+  const punchExtensionValues = [0, 50, 100, 150, 200].map((value) => ({
+    mm: value,
+    in: parseFloat((value * 0.03937).toFixed(2)), // Convert mm → in
+  }));
 
   const handleCalculate = () => {
     if (!boxHeight) {
@@ -54,11 +65,8 @@ const BoxBendingCalculator: React.FC = () => {
     }
 
     const ramWidth = ramWidths[machineType] || 0;
-
-    // Calculate tool height requirement
     const toolHeight = boxHeightNum / 0.707 + ramWidth * 0.563;
 
-    // Determine base open height and apply clamping/die reductions
     const baseOpenHeight = machineType.startsWith("BB")
       ? openHeights.BB
       : machineType.startsWith("BH")
@@ -73,49 +81,19 @@ const BoxBendingCalculator: React.FC = () => {
       additionalHeight +
       punchExtension;
 
-    // Calculate daylight
     const daylight = reducedOpenHeight - toolHeight;
     const hasSufficientHeight = daylight >= 0;
 
-    // Convert to inches (1 mm = 0.03937 inches)
-    const toolHeightInches = toolHeight * 0.03937;
-    const reducedOpenHeightInches = reducedOpenHeight * 0.03937;
-    const daylightInches = daylight * 0.03937;
+    // Convert results based on the selected unit
+    const convertedToolHeight = (toolHeight * conversionFactor).toFixed(2);
+    const convertedOpenHeight = (reducedOpenHeight * conversionFactor).toFixed(2);
+    const convertedDaylight = (daylight * conversionFactor).toFixed(2);
 
-    // Display results
     setResult(
-      `Tool Height Requirement: ${toolHeight.toFixed(2)} mm (${toolHeightInches.toFixed(2)} inches)\n` +
-        `Total Open Height Available: ${reducedOpenHeight.toFixed(2)} mm (${reducedOpenHeightInches.toFixed(2)} inches)\n` +
-        `Available Daylight: ${daylight.toFixed(2)} mm (${daylightInches.toFixed(2)} inches)\n` +
+      `Tool Height Requirement: ${convertedToolHeight} ${unitLabel}\n` +
+        `Total Open Height Available: ${convertedOpenHeight} ${unitLabel}\n` +
+        `Available Daylight: ${convertedDaylight} ${unitLabel}\n` +
         `Open Height Availability: ${hasSufficientHeight ? "Yes" : "No"}`
-    );
-  };
-
-  const renderAdditionalHeight = () => {
-    if (machineType === "PA13530-PA16040" || machineType === "PA22030-PA22040") {
-      return null; // Do not show the dropdown for PA machines
-    }
-    return (
-      <label>
-        Additional Open Height (mm)
-        <select
-          value={additionalHeight}
-          onChange={(e) => setAdditionalHeight(parseInt(e.target.value))}
-        >
-          {machineType === "BB" ? (
-            <>
-              <option value={0}>None</option>
-              <option value={100}>+100mm</option>
-            </>
-          ) : (
-            <>
-              <option value={0}>None</option>
-              <option value={100}>+100mm</option>
-              <option value={200}>+200mm</option>
-            </>
-          )}
-        </select>
-      </label>
     );
   };
 
@@ -123,12 +101,19 @@ const BoxBendingCalculator: React.FC = () => {
     <div className="BoxBendingCalculator">
       <h2>Box Bending Calculator</h2>
 
+      {/* ✅ Unit Toggle Switch */}
+      <div className="unit-toggle">
+        <span>mm</span>
+        <label className="switch">
+          <input type="checkbox" checked={unit === "in"} onChange={toggleUnit} />
+          <span className="slider round"></span>
+        </label>
+        <span>inch</span>
+      </div>
+
       <label>
         Machine Type
-        <select
-          value={machineType}
-          onChange={(e) => setMachineType(e.target.value as MachineType)}
-        >
+        <select value={machineType} onChange={(e) => setMachineType(e.target.value as MachineType)}>
           <option value="BB">BB</option>
           <option value="BH8525-BH13530">BH8525-BH13530</option>
           <option value="BH18530-BH25040">BH18530-BH25040</option>
@@ -138,50 +123,35 @@ const BoxBendingCalculator: React.FC = () => {
       </label>
 
       <label>
-        Box Height (mm)
-        <input
-          type="number"
-          value={boxHeight}
-          onChange={(e) => setBoxHeight(e.target.value)}
-          placeholder="Enter box height"
-        />
+        Box Height ({unitLabel})
+        <input type="number" value={boxHeight} onChange={(e) => setBoxHeight(e.target.value)} placeholder="Enter box height" />
       </label>
 
       <label>
         Upper Clamping Style
-        <select
-          value={clampingStyle}
-          onChange={(e) => setClampingStyle(e.target.value as ClampingStyle)}
-        >
-          <option value="European">European (150mm)</option>
-          <option value="American Manual">American Manual (150mm)</option>
-          <option value="WT/New Standard">WT/New Standard (70mm)</option>
-          <option value="American Hydraulic">American Hydraulic (60mm)</option>
+        <select value={clampingStyle} onChange={(e) => setClampingStyle(e.target.value as ClampingStyle)}>
+          <option value="European">European</option>
+          <option value="American Manual">American Manual</option>
+          <option value="WT/New Standard">WT/New Standard</option>
+          <option value="American Hydraulic">American Hydraulic</option>
         </select>
       </label>
 
       <label>
-        Punch Extension (mm)
-        <select
-          value={punchExtension}
-          onChange={(e) => setPunchExtension(parseInt(e.target.value))}
-        >
-          <option value={0}>None</option>
-          <option value={50}>50mm</option>
-          <option value={100}>100mm</option>
-          <option value={150}>150mm</option>
-          <option value={200}>200mm</option>
+        Punch Extension ({unitLabel})
+        <select value={punchExtension} onChange={(e) => setPunchExtension(parseFloat(e.target.value))}>
+          {punchExtensionValues.map((val) => (
+            <option key={val.mm} value={unit === "mm" ? val.mm : val.in}>
+              {unit === "mm" ? `${val.mm} mm` : `${val.in} in`}
+            </option>
+          ))}
         </select>
       </label>
-
-      {/* Conditional rendering of Additional Open Height */}
-      {renderAdditionalHeight()}
 
       <button onClick={handleCalculate}>Calculate</button>
 
       {result && <div className="result-output">{result}</div>}
 
-      {/* Home Button */}
       <Link to="/" className="button home-button">
         Home
       </Link>

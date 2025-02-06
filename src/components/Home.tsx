@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Footer from "./Footer";
 import "../styles/App.css"
+import Footer from './Footer';
 import { default as MachineRecommenderIcon } from "../assets/MachineRecommenderIcon";
 import { default as BoxIcon } from "../assets/BoxIcon";
 import { default as HemmingIcon } from "../assets/HemmingIcon";
@@ -49,6 +49,13 @@ const Home: React.FC = () => (
                     <div className="icon-content">
                         <span><b>Daylight Calculator</b></span>
                         <div className="subtext">Determine available Daylight depending on tool and machine configuration</div>
+                    </div>
+                </Link>
+                <Link to="/machine-spec" className="icon icon-red">
+                <MachineRecommenderIcon width={50} height={50} />
+                    <div className="icon-content">
+                        <span><b>Machine Spec Guide</b></span>
+                        <div className="subtext">View detailed specs of each machine</div>
                     </div>
                 </Link>
             </div>

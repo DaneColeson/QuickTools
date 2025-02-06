@@ -1,196 +1,180 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useUnit } from "./UnitContext"; // Unit toggle context
 import "../styles/App.css";
 
-// Define the type for V-die options
-type VDieOptions = {
-    [vDie: string]: number;
+// Define air bending chart with V-die options & min tons per foot
+const airBendingChart = {
+  "0.91": { "6.0": 3.6 }, // 0.036 in -> 0.91 mm, 0.236 in -> 6.0 mm
+  "1.22": { "8.0": 4.8 },
+  "1.52": { "10.0": 6.0 },
+  "1.91": { "12.0": 7.5 },
+  "2.29": { "14.0": 10.1 },
+  "2.67": { "16.0": 10.5 },
+  "3.05": { "25.0": 7.2 },
+  "3.43": { "25.0": 8.1 },
+  "3.81": { "32.0": 9.0 },
+  "4.78": { "40.0": 11.3 },
+  "6.35": { "50.0": 15.0 },
+  "7.95": { "63.0": 18.8 },
+  "9.53": { "100.0": 15.0 },
+  "12.70": { "125.0": 22.2 },
+  "15.88": { "200.0": 20.0 },
+  "19.05": { "250.0": 22.5 },
+  "25.40": { "300.0": 43.25 },
 };
 
-// Define the type for the Air Bending Chart
-type AirBendingChart = {
-    [thickness: string]: VDieOptions;
+// Define machine groups with accurate capacities & lengths
+const machineGroups = {
+  Diamond: [
+    { name: "BB306", capacity: 28, length: 635 }, // 25 in -> 635 mm
+    { name: "BB4013", capacity: 36, length: 1270 },
+    { name: "BB6013", capacity: 55, length: 1300 },
+    { name: "BB6020", capacity: 55, length: 2100 },
+    { name: "BH8525", capacity: 93, length: 2600 },
+    { name: "BH13530", capacity: 147, length: 3100 },
+    { name: "BH18530", capacity: 203, length: 3100 },
+    { name: "BH25030", capacity: 275, length: 3100 },
+    { name: "BH18540", capacity: 203, length: 4100 },
+    { name: "BH25040", capacity: 275, length: 4100 },
+  ],
+  Adira: [
+    { name: "PA13530", capacity: 147, length: 3100 },
+    { name: "PA16030", capacity: 176, length: 3100 },
+    { name: "PA22030", capacity: 242, length: 3100 },
+    { name: "PA13540", capacity: 147, length: 4100 },
+    { name: "PA16040", capacity: 176, length: 4100 },
+    { name: "PA22040", capacity: 242, length: 4100 },
+    { name: "PH Series", capacity: 1000, length: 25000 },
+  ],
 };
 
-// Define the chart
-const airBendingChart: AirBendingChart = {
-    ".036": { ".236": 3.6 },
-    ".048": { ".315": 4.8 },
-    ".060": { ".394": 6.0 },
-    ".075": { ".472": 7.5 },
-    ".090": { ".551": 10.1 },
-    ".105": { ".630": 10.5 },
-    ".120": { ".984": 7.2 },
-    ".135": { ".984": 8.1 },
-    ".150": { "1.260": 9.0 },
-    ".188": { "1.575": 11.3 },
-    ".250": { "1.969": 15.0 },
-    ".313": { "2.480": 18.8 },
-    ".375": { "3.937": 15.0 },
-    ".500": { "4.921": 22.2 },
-    ".625": { "7.874": 20.0 },
-    ".750": { "9.843": 22.5 },
-    "1.000": { "12.000": 43.25 },
-};
-
-// Define machines by type
-type MachineType = 'Diamond' | 'Adira';
-
-const machineGroups: { [key in MachineType]: { name: string; capacity: number; length: number }[] } = {
-    Diamond: [
-        { name: "BB306", capacity: 28, length: 25 },
-        { name: "BB4013", capacity: 36, length: 50 },
-        { name: "BB6013", capacity: 55, length: 51 },
-        { name: "BB6020", capacity: 55, length: 83 },
-        { name: "BH8525", capacity: 93, length: 102 },
-        { name: "BH13530", capacity: 147, length: 122 },
-        { name: "BH18530", capacity: 203, length: 122 },
-        { name: "BH25030", capacity: 275, length: 122 },
-        { name: "BH18540", capacity: 203, length: 161 },
-        { name: "BH25040", capacity: 275, length: 161 },
-    ],
-    Adira: [
-        { name: "PA13530", capacity: 147, length: 122 },
-        { name: "PA16030", capacity: 176, length: 122 },
-        { name: "PA22030", capacity: 242, length: 122 },
-        { name: "PA13540", capacity: 147, length: 161 },
-        { name: "PA16040", capacity: 176, length: 161 },
-        { name: "PA22040", capacity: 242, length: 161 },
-        { name: "PH Series", capacity: 1000, length: 1000 },
-    ],
-};
-
-// Define material type multipliers
-const materialMultipliers: { [key: string]: number } = {
-    "Mild Steel": 1.0,
-    "Aluminum": 0.5,
-    "Stainless Steel": 1.5,
-    "High Strength Steel": 2.5,
+// Define material multipliers
+const materialMultipliers = {
+  "Mild Steel": 1.0,
+  Aluminum: 0.5,
+  "Stainless Steel": 1.5,
+  "High Strength Steel": 2.5,
 };
 
 const MachineRecommender: React.FC = () => {
-    const [machineType, setMachineType] = useState<MachineType | "">(""); // Track selected machine type
-    const [thickness, setThickness] = useState<string>(""); // Track selected material thickness
-    const [materialType, setMaterialType] = useState<string>(""); // Track selected material type
-    const [bendLength, setBendLength] = useState<string>("");
-    const [result, setResult] = useState<React.ReactNode>(null);
+  const { unit, toggleUnit } = useUnit(); // Unit toggle
+  const [machineType, setMachineType] = useState<string>("");
+  const [thickness, setThickness] = useState<string>("");
+  const [materialType, setMaterialType] = useState<keyof typeof materialMultipliers>("Mild Steel");
+  const [bendLength, setBendLength] = useState<string>("");
+  const [result, setResult] = useState<React.ReactNode>(null);
 
-    const handleCalculate = () => {
-        if (!thickness || !bendLength || !machineType || !materialType) {
-            setResult("Please select a material thickness, material type, machine type, and enter a bend length.");
-            return;
-        }
-    
-        const selectedData = airBendingChart[thickness];
-        if (!selectedData) {
-            setResult("No data available for the selected material thickness.");
-            return;
-        }
-    
-        // Find the V-die size and corresponding minimum tons/foot
-        let minTonsPerFoot = Infinity;
-        let vDieSize = "";
-        for (const [vDie, tonsPerFoot] of Object.entries(selectedData)) {
-            if (tonsPerFoot < minTonsPerFoot) {
-                minTonsPerFoot = tonsPerFoot;
-                vDieSize = vDie;
-            }
-        }
-    
-        // Apply material multiplier
-        const multiplier = materialMultipliers[materialType];
-        const adjustedTonsPerFoot = minTonsPerFoot * multiplier;
-    
-        // Calculate total tonnage
-        const lengthInFeet = parseFloat(bendLength) / 12;
-        const totalTonnage = lengthInFeet * adjustedTonsPerFoot;
-    
-        // Convert length to meters (1 inch = 0.0254 meters)
-        const lengthInMeters = parseFloat(bendLength) * 0.0254;
-    
-        // Filter machines by selected type
-        const machines = machineGroups[machineType];
-        const recommendedMachine = machines.find(
-            (machine) => machine.capacity >= totalTonnage && machine.length >= parseFloat(bendLength)
-        );
-    
-        if (recommendedMachine) {
-            setResult(
-                <>
-                    <div>V-Die Size: {vDieSize} inches</div>
-                    <div>Adjusted Tons/Foot: {adjustedTonsPerFoot.toFixed(2)} tons</div>
-                    <div>Total Bend Length: {lengthInMeters.toFixed(2)} meters</div>
-                    <div>Total Tonnage Required: {totalTonnage.toFixed(2)} tons</div>
-                    <div>
-                        <strong>
-                            Recommended Machine: {recommendedMachine.name} (Capacity: {recommendedMachine.capacity} tons, Length:{" "}
-                            {recommendedMachine.length} inches)
-                        </strong>
-                    </div>
-                </>
-            );
-        } else {
-            setResult("No suitable machine available for the given requirements.");
-        }
+  const handleCalculate = () => {
+    if (!thickness || !bendLength || !machineType || !materialType) {
+      setResult("Please select all required fields.");
+      return;
+    }
 
-    };
+    const selectedData = airBendingChart[thickness as keyof typeof airBendingChart];
+    if (!selectedData) {
+      setResult("No data available for this material thickness.");
+      return;
+    }
 
-    return (
-        <div className="MachineRecommender">
-            <h2>Machine Recommender</h2>
+    let minTonsPerFoot = Infinity;
+    let vDieSize = "";
+    for (const [vDie, tonsPerFoot] of Object.entries(selectedData)) {
+      if (tonsPerFoot < minTonsPerFoot) {
+        minTonsPerFoot = tonsPerFoot;
+        vDieSize = vDie;
+      }
+    }
 
-            <label>
-                Material Thickness
-                <select value={thickness} onChange={(e) => setThickness(e.target.value)}>
-                    <option value="">Select...</option>
-                    {Object.keys(airBendingChart).map((key) => (
-                        <option key={key} value={key}>
-                            {key}
-                        </option>
-                    ))}
-                </select>
-            </label>
+    const multiplier = materialMultipliers[materialType];
+    const adjustedTonsPerFoot = minTonsPerFoot * multiplier;
 
-            <label>
-                Material Type
-                <select value={materialType} onChange={(e) => setMaterialType(e.target.value)}>
-                    <option value="">Select...</option>
-                    <option value="Mild Steel">Mild Steel (x1.0)</option>
-                    <option value="Aluminum">Aluminum (x0.5)</option>
-                    <option value="Stainless Steel">Stainless Steel (x1.5)</option>
-                    <option value="High Strength Steel">High Strength Steel (x2.5)</option>
-                </select>
-            </label>
+    const bendLengthNum = parseFloat(bendLength);
+    const lengthInFeet = unit === "in" ? bendLengthNum / 12 : bendLengthNum * 0.00328084;
+    const totalTonnage = lengthInFeet * adjustedTonsPerFoot;
 
-            <label>
-                Total Bend Length (inches)
-                <input
-                    type="number"
-                    value={bendLength}
-                    onChange={(e) => setBendLength(e.target.value)}
-                    placeholder="Enter total bend length"
-                />
-            </label>
+    const machines = machineGroups[machineType as keyof typeof machineGroups];
 
-            <label>
-                Machine Type
-                <select value={machineType} onChange={(e) => setMachineType(e.target.value as MachineType | "")}>
-                    <option value="">Select...</option>
-                    <option value="Diamond">Diamond Series</option>
-                    <option value="Adira">Adira</option>
-                </select>
-            </label>
-
-            <button onClick={handleCalculate}>Calculate</button>
-
-            {result && <div className="result-output">{result}</div>}
-
-            {/* Home Button */}
-            <Link to="/" className="button home-button">
-                Home
-            </Link>
-        </div>
+    const recommendedMachine = machines.find(
+      (machine) =>
+        machine.capacity >= totalTonnage &&
+        (unit === "mm" ? machine.length >= bendLengthNum : machine.length >= bendLengthNum * 25.4)
     );
+
+    setResult(
+      recommendedMachine ? (
+        <>
+          <div>V-Die Size: {vDieSize} {unit}</div>
+          <div>Adjusted Tons/Foot: {adjustedTonsPerFoot.toFixed(2)} tons</div>
+          <div>Total Bend Length: {bendLengthNum} {unit}</div>
+          <div>Total Tonnage Required: {totalTonnage.toFixed(2)} tons</div>
+          <div>
+            <strong>
+              Recommended Machine: {recommendedMachine.name} (Capacity: {recommendedMachine.capacity} tons, Length:{" "}
+              {unit === "mm" ? recommendedMachine.length + " mm" : (recommendedMachine.length / 25.4).toFixed(1) + " in"})
+            </strong>
+          </div>
+        </>
+      ) : (
+        "No suitable machine available."
+      )
+    );
+  };
+
+  return (
+    <div className="MachineRecommender">
+      <h2>Machine Recommender</h2>
+
+      {/* ✅ Unit Toggle Switch - Centered */}
+      <div className="unit-toggle">
+        <span>mm</span>
+        <label className="switch">
+          <input type="checkbox" checked={unit === "in"} onChange={toggleUnit} />
+          <span className="slider round"></span>
+        </label>
+        <span>inch</span>
+      </div>
+
+      {/* Other form fields go here */}
+      <label>Material Thickness</label>
+      <select value={thickness} onChange={(e) => setThickness(e.target.value)}>
+        <option value="">Select...</option>
+        {Object.keys(airBendingChart).map((key) => (
+          <option key={key} value={key}>
+            {unit === "mm" ? `${key} mm` : `${(parseFloat(key) / 25.4).toFixed(3)} in`}
+          </option>
+        ))}
+      </select>
+
+      <label>Material Type</label>
+      <select value={materialType} onChange={(e) => setMaterialType(e.target.value as keyof typeof materialMultipliers)}>
+        {Object.keys(materialMultipliers).map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </select>
+
+      <label>Total Bend Length ({unit})</label>
+      <input type="number" value={bendLength} onChange={(e) => setBendLength(e.target.value)} />
+
+      <label>Machine Type</label>
+      <select value={machineType} onChange={(e) => setMachineType(e.target.value)}>
+        <option value="">Select...</option>
+        <option value="Diamond">Diamond Series</option>
+        <option value="Adira">Adira</option>
+      </select>
+
+      <button onClick={handleCalculate}>Calculate</button>
+
+      {result && <div className="result-output">{result}</div>}
+
+      <Link to="/" className="button home-button">
+        Home
+      </Link>
+    </div>
+  );
 };
+
 
 export default MachineRecommender;

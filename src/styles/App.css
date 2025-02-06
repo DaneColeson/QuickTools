@@ -255,71 +255,108 @@ button:hover {
     }
 }
 
-/* --- Hamburger Menu Container --- */
-.hamburger-menu {
-    position: fixed;
-    top: 0px;
-    left: 10px;
-    z-index: 9999;
-    margin-bottom: 100px;
-    box-shadow: none;
+/* --- Machine Spec Guide Styles --- */
+.machine-spec-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
-/* --- Hamburger Button (Smaller & Top-Left) --- */
-.hamburger-icon {
-    font-size: 22px;  /* Smaller icon size */
-    background: none;
-    border-radius: 0px;
-    border: none;
-    cursor: pointer;
-    color: #007aff; /* iOS blue */
-    padding: 30px;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-/* --- Fullscreen Background When Menu is Open --- */
-.menu {
-    position: fixed;
-    top: 10%;
-    left: 0;
-    width: 25%;
-    height: 50vh; /* Covers the entire screen */
-    background: rgba(255, 255, 255, 0.95); /* White with slight transparency */
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: center;
-    z-index: 10000; /* Ensures it’s above other elements */
-    transition: none;
-}
-
-/* --- Menu Items --- */
-.menu a {
-    padding: 10px 15px;
+label {
+    display: block;
+    margin-top: 10px;
     font-size: 1rem;
-    text-decoration: none;
-    color: #333;
-    transition: background 0.2s ease-in-out;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+/* --- Toggle Switch --- */
+.unit-toggle {
     display: flex;
     align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
 }
 
-.menu a:hover {
-    background: #f0f0f0;
-    transform: translate(0px, -0px);
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
 }
 
-/* --- Mobile Responsiveness --- */
-@media (max-width: 768px) {
-    .hamburger-icon {
-        font-size: 28px;
-        top: 10px;
-        left: 10px;
-    }
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
-    .menu {
-        width: 180px;
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #007aff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* --- Table Styling --- */
+.machine-spec-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+.machine-spec-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.machine-spec-table td:first-child {
+    font-weight: bold;
+}
+
+/* Mobile Optimization */
+@media (max-width: 600px) {
+    .machine-spec-container {
+        width: 90%;
     }
 }
