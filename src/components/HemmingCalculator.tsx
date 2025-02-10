@@ -31,10 +31,6 @@ const HemmingCalculator: React.FC = () => {
   const [materialType, setMaterialType] = useState("steel");
   const [hemType, setHemType] = useState("open");
   const [bendLength, setBendLength] = useState("");
-  const [result, setResult] = useState<string | null>(null);
-
-  const conversionFactor = unit === "in" ? 1 : 25.4; // 1 inch = 25.4 mm
-  const unitLabel = unit === "in" ? "inches" : "mm";
 
   // Get the correct material thickness value for the selected unit
   const thicknessOptions = Object.keys(thicknessData).map((key) => ({
@@ -42,21 +38,17 @@ const HemmingCalculator: React.FC = () => {
     label: unit === "in" ? `${thicknessData[key].in.toFixed(3)} in` : `${thicknessData[key].mm.toFixed(2)} mm`,
   }));
 
-  const calculateTonnage = () => {
-    const bendLengthNum = parseFloat(bendLength);
-    if (isNaN(bendLengthNum) || bendLengthNum <= 0) {
-      setResult(`Please enter a valid bend length in ${unitLabel}.`);
-      return;
-    }
+  // Convert bend length input
+  const bendLengthNum = parseFloat(bendLength) || 0;
+  const bendLengthConverted = unit === "in" ? bendLengthNum / 12 : bendLengthNum / 1000;
+  const bendLengthDisplayUnit = unit === "in" ? "ft" : "m";
 
-    const tonnagePerFoot = tonnageLookup[selectedThickness][materialType][hemType];
+  // Convert tonnage per foot to tons per meter if in metric
+  const tonnagePerFoot = tonnageLookup[selectedThickness][materialType][hemType];
+  const tonnagePerMeter = unit === "in" ? tonnagePerFoot : tonnagePerFoot * 3.28084;
 
-    // Convert length to feet before calculation
-    const bendLengthInFeet = unit === "in" ? bendLengthNum / 12 : bendLengthNum / 304.8;
-    const totalTonnage = (bendLengthInFeet * tonnagePerFoot).toFixed(2);
-
-    setResult(`Estimated Tonnage: ${totalTonnage} tons`);
-  };
+  // Calculate total tonnage
+  const totalTonnage = (bendLengthConverted * tonnagePerMeter).toFixed(2);
 
   return (
     <div className="HemmingCalculator">
@@ -72,47 +64,51 @@ const HemmingCalculator: React.FC = () => {
         <span>inch</span>
       </div>
 
-      <label htmlFor="material-thickness">Material Thickness</label>
-      <select
-        id="material-thickness"
-        value={selectedThickness}
-        onChange={(e) => setSelectedThickness(e.target.value)}
-      >
+      <label>Material Thickness</label>
+      <select value={selectedThickness} onChange={(e) => setSelectedThickness(e.target.value)}>
         {thicknessOptions.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
+          <option key={value} value={value}>{label}</option>
         ))}
       </select>
 
-      <label htmlFor="material-type">Material Type</label>
-      <select id="material-type" value={materialType} onChange={(e) => setMaterialType(e.target.value)}>
+      <label>Material Type</label>
+      <select value={materialType} onChange={(e) => setMaterialType(e.target.value)}>
         <option value="steel">Steel</option>
         <option value="stainless">Stainless</option>
         <option value="aluminum">Aluminum</option>
       </select>
 
-      <label htmlFor="hem-type">Hem Type</label>
-      <select id="hem-type" value={hemType} onChange={(e) => setHemType(e.target.value)}>
+      <label>Hem Type</label>
+      <select value={hemType} onChange={(e) => setHemType(e.target.value)}>
         <option value="open">Open Hem</option>
         <option value="closed">Closed Hem</option>
       </select>
 
-      <label htmlFor="bend-length">Total Bend Length ({unitLabel})</label>
+      <label>Total Bend Length ({unit})</label>
       <input
         type="number"
-        id="bend-length"
         value={bendLength}
         onChange={(e) => setBendLength(e.target.value)}
-        placeholder={`Enter length in ${unitLabel}`}
+        placeholder={`Enter length in ${unit}`}
       />
 
-      <button onClick={calculateTonnage}>Calculate</button>
-      <p id="result">{result}</p>
+      {/* ✅ Results displayed in iOS-style bubbles (Always Visible) */}
+      <div className="results-container">
+        <div className="result-item">
+          <span className="result-bubble">{bendLengthConverted.toFixed(2)} {bendLengthDisplayUnit}</span>
+          <span className="result-label">Bend Length</span>
+        </div>
+        <div className="result-item">
+          <span className="result-bubble">{tonnagePerMeter.toFixed(2)}</span>
+          <span className="result-label">Tons/{unit === "in" ? "Foot" : "Meter"}</span>
+        </div>
+        <div className="result-item">
+          <span className="result-bubble">{totalTonnage}</span>
+          <span className="result-label">Total Tonnage</span>
+        </div>
+      </div>
 
-      <Link to="/" className="button home-button">
-        Home
-      </Link>
+      <Link to="/" className="button home-button">Home</Link>
     </div>
   );
 };

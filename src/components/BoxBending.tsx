@@ -18,7 +18,7 @@ const openHeights = {
 };
 
 const clampingStyles = {
-  "European": { clamp: 150, die: 60 },
+  European: { clamp: 150, die: 60 },
   "American Manual": { clamp: 150, die: 93 },
   "American Hydraulic": { clamp: 91.4, die: 98 },
   "WT/New Standard": { clamp: 62, die: 110 },
@@ -40,16 +40,20 @@ const BoxBendingCalculator: React.FC = () => {
   const [machineType, setMachineType] = useState<MachineType>("BB");
   const [boxHeight, setBoxHeight] = useState<string>("");
   const [punchExtension, setPunchExtension] = useState<number>(0);
-  const [additionalHeight, setAdditionalHeight] = useState<number>(0);
+  const [extendedOpenHeight, setExtendedOpenHeight] = useState<number>(0);
   const [result, setResult] = useState<string | null>(null);
 
   const conversionFactor = unit === "in" ? 0.03937 : 1;
   const unitLabel = unit === "in" ? "inches" : "mm";
 
-  // Generate punch extension values dynamically based on the unit
   const punchExtensionValues = [0, 50, 100, 150, 200].map((value) => ({
     mm: value,
-    in: parseFloat((value * 0.03937).toFixed(2)), // Convert mm → in
+    in: parseFloat((value * 0.03937).toFixed(2)),
+  }));
+
+  const extendedOpenHeightValues = [0, 100, 200].map((value) => ({
+    mm: value,
+    in: parseFloat((value * 0.03937).toFixed(2)),
   }));
 
   const handleCalculate = () => {
@@ -75,11 +79,7 @@ const BoxBendingCalculator: React.FC = () => {
 
     const clampingStyleConfig = clampingStyles[clampingStyle];
     const reducedOpenHeight =
-      baseOpenHeight -
-      clampingStyleConfig.clamp -
-      clampingStyleConfig.die +
-      additionalHeight +
-      punchExtension;
+      baseOpenHeight - clampingStyleConfig.clamp - clampingStyleConfig.die + extendedOpenHeight + punchExtension;
 
     const daylight = reducedOpenHeight - toolHeight;
     const hasSufficientHeight = daylight >= 0;
@@ -141,6 +141,17 @@ const BoxBendingCalculator: React.FC = () => {
         Punch Extension ({unitLabel})
         <select value={punchExtension} onChange={(e) => setPunchExtension(parseFloat(e.target.value))}>
           {punchExtensionValues.map((val) => (
+            <option key={val.mm} value={unit === "mm" ? val.mm : val.in}>
+              {unit === "mm" ? `${val.mm} mm` : `${val.in} in`}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        Extended Open Height ({unitLabel})
+        <select value={extendedOpenHeight} onChange={(e) => setExtendedOpenHeight(parseFloat(e.target.value))}>
+          {extendedOpenHeightValues.map((val) => (
             <option key={val.mm} value={unit === "mm" ? val.mm : val.in}>
               {unit === "mm" ? `${val.mm} mm` : `${val.in} in`}
             </option>

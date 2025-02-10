@@ -1,208 +1,149 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useUnit } from "./UnitContext"; // ✅ Global unit context
 
-// Material multipliers
+// ✅ Lookup table for Material Thickness → V-die sizes
+const vDieLookup = [
+    { thickness: { mm: 0.91, in: 0.036 }, vDie: { mm: 6.0, in: 0.236 }, recommended: { mm: 6.0, in: 0.236 } },
+    { thickness: { mm: 1.22, in: 0.048 }, vDie: { mm: 8.0, in: 0.315 }, recommended: { mm: 8.0, in: 0.315 } },
+    { thickness: { mm: 1.52, in: 0.060 }, vDie: { mm: 10.0, in: 0.394 }, recommended: { mm: 10.0, in: 0.394 } },
+    { thickness: { mm: 1.91, in: 0.075 }, vDie: { mm: 12.0, in: 0.472 }, recommended: { mm: 12.0, in: 0.472 } },
+    { thickness: { mm: 2.29, in: 0.090 }, vDie: { mm: 14.0, in: 0.551 }, recommended: { mm: 14.0, in: 0.551 } },
+    { thickness: { mm: 2.67, in: 0.105 }, vDie: { mm: 16.0, in: 0.630 }, recommended: { mm: 16.0, in: 0.630 } },
+    { thickness: { mm: 3.05, in: 0.120 }, vDie: { mm: 25.0, in: 0.984 }, recommended: { mm: 25.0, in: 0.984 } },
+    { thickness: { mm: 3.43, in: 0.135 }, vDie: { mm: 25.0, in: 0.984 }, recommended: { mm: 25.0, in: 0.984 } },
+    { thickness: { mm: 3.81, in: 0.150 }, vDie: { mm: 32.0, in: 1.260 }, recommended: { mm: 32.0, in: 1.260 } },
+    { thickness: { mm: 4.78, in: 0.188 }, vDie: { mm: 40.0, in: 1.575 }, recommended: { mm: 40.0, in: 1.575 } },
+    { thickness: { mm: 6.35, in: 0.250 }, vDie: { mm: 50.0, in: 1.969 }, recommended: { mm: 50.0, in: 1.969 } },
+    { thickness: { mm: 7.95, in: 0.313 }, vDie: { mm: 63.0, in: 2.480 }, recommended: { mm: 63.0, in: 2.480 } },
+    { thickness: { mm: 9.53, in: 0.375 }, vDie: { mm: 100.0, in: 3.937 }, recommended: { mm: 100.0, in: 3.937 } },
+    { thickness: { mm: 12.70, in: 0.500 }, vDie: { mm: 125.0, in: 4.921 }, recommended: { mm: 125.0, in: 4.921 } },
+    { thickness: { mm: 15.88, in: 0.625 }, vDie: { mm: 200.0, in: 7.874 }, recommended: { mm: 200.0, in: 7.874 } },
+    { thickness: { mm: 19.05, in: 0.750 }, vDie: { mm: 250.0, in: 9.843 }, recommended: { mm: 250.0, in: 9.843 } },
+    { thickness: { mm: 25.40, in: 1.000 }, vDie: { mm: 300.0, in: 11.811 }, recommended: { mm: 300.0, in: 11.811 } },
+];
+
 const materialMultipliers = {
-    MildSteel: 1,
-    Aluminum: 0.5,
-    StainlessSteel: 1.5,
-    HighStrengthSteel: 2.5,
+  MildSteel: 1,
+  Aluminum: 0.5,
+  StainlessSteel: 1.5,
+  HighStrengthSteel: 2.5,
 };
-
-// Predefined material thickness options
-const materialThicknesses = [
-    "0.036",
-    "0.048",
-    "0.060",
-    "0.075",
-    "0.090",
-    "0.105",
-    "0.120",
-    "0.135",
-    "0.150",
-    "0.188",
-    "0.250",
-    "0.313",
-    "0.375",
-    "0.500",
-    "0.625",
-    "0.750",
-    "1.000",
-    "1.250",
-    "1.500",
-    "2.000",
-];
-
-// Predefined recommended V-die sizes for each material thickness
-const recommendedVDies: { [key: string]: string[] } = {
-    "0.036": ["0.236"],
-    "0.048": ["0.315"],
-    "0.060": ["0.394"],
-    "0.075": ["0.472"],
-    "0.090": ["0.551"],
-    "0.105": ["0.630"],
-    "0.120": ["0.984"],
-    "0.135": ["0.984"],
-    "0.150": ["1.260"],
-    "0.188": ["1.575"],
-    "0.250": ["1.969"],
-    "0.313": ["2.480"],
-    "0.375": ["3.937"],
-    "0.500": ["4.921"],
-    "0.625": ["7.874"],
-    "0.750": ["9.843"],
-    "1.000": ["11.811"],
-    "1.250": ["15.748"],
-    "1.500": ["17.717"],
-    "2.000": ["23.622"],
-};
-
-// Predefined V-die sizes
-const vDieSizes = [
-    "0.236",
-    "0.315",
-    "0.394",
-    "0.472",
-    "0.551",
-    "0.630",
-    "0.984",
-    "1.260",
-    "1.575",
-    "1.969",
-    "2.480",
-    "3.937",
-    "4.921",
-    "7.874",
-    "9.843",
-    "11.811",
-    "15.748",
-    "17.717",
-    "23.622",
-];
 
 const TonnageCalculator: React.FC = () => {
-    const [thickness, setThickness] = useState<string>(""); // Material thickness
-    const [materialType, setMaterialType] = useState<keyof typeof materialMultipliers>("MildSteel"); // Material type
-    const [vDieSize, setVDieSize] = useState<string>(""); // Selected V-die size
-    const [bendLength, setBendLength] = useState<string>(""); // Total bend length
-    const [result, setResult] = useState<string | null>(null); // Calculation result
+  const { unit, toggleUnit } = useUnit();
+  const [thickness, setThickness] = useState<number | "">("");
+  const [materialType, setMaterialType] = useState<keyof typeof materialMultipliers>("MildSteel");
+  const [vDieSize, setVDieSize] = useState<number | "">("");
+  const [bendLength, setBendLength] = useState<number | "">("");
+  const [result, setResult] = useState<string | null>(null);
 
-    // Calculate filtered V-die sizes based on thickness
-    const filteredVDies = thickness
-        ? vDieSizes.filter((die) => {
-              const thicknessNum = parseFloat(thickness);
-              const dieNum = parseFloat(die);
-              return dieNum >= thicknessNum * 4 && dieNum <= thicknessNum * 15;
-          })
-        : [];
+  const getVDieOptions = (thickness: number, unit: "mm" | "in") => {
+    // Find the entry that directly matches the selected thickness in the current unit
+    const entry = vDieLookup.find((row) => row.thickness[unit] === thickness);
+    if (!entry) return [];
+  
+    // Extract the recommended V-die
+    const recommendedVDie = entry.recommended;
+  
+    // Find the index of the matched entry
+    const index = vDieLookup.findIndex((row) => row.thickness[unit] === thickness);
+  
+    // Get recommended + 2 larger & 2 smaller V-dies
+    const vDieOptions = [
+      vDieLookup[index - 2]?.vDie ?? null,
+      vDieLookup[index - 1]?.vDie ?? null,
+      recommendedVDie ? { ...recommendedVDie, isRecommended: true } : null, // ✅ Mark as "Recommended"
+      vDieLookup[index + 1]?.vDie ?? null,
+      vDieLookup[index + 2]?.vDie ?? null,
+    ].filter((die) => die !== null);
+  
+    return vDieOptions.map((vDie) => ({
+      mm: vDie!.mm,
+      in: vDie!.in,
+      label: vDie!.mm === recommendedVDie.mm ? `${vDie![unit as keyof typeof vDie]} (Recommended)` : `${vDie![unit as keyof typeof vDie]}`,
+    }));
+  };
+  
+  
+  
 
-    const handleCalculate = () => {
-        if (!thickness || !vDieSize || !bendLength) {
-            setResult("Please select material thickness, V-die size, material type, and enter a valid bend length.");
-            return;
-        }
+  const handleCalculate = () => {
+    if (!thickness || !vDieSize || !bendLength) {
+      setResult("Please select all fields and enter a valid bend length.");
+      return;
+    }
 
-        const thicknessNum = parseFloat(thickness);
-        const vDieSizeNum = parseFloat(vDieSize);
-        const bendLengthNum = parseFloat(bendLength);
+    const multiplier = materialMultipliers[materialType];
+    const tonsPerFoot = multiplier * ((575 * Math.pow(thickness as number, 2)) / (vDieSize as number));
+    const tonsPerMeter = tonsPerFoot / 7.74192;
+    const totalTons = unit === "mm"
+      ? tonsPerMeter * ((bendLength as number) / 1000)
+      : tonsPerFoot * ((bendLength as number) / 12);
 
-        if (isNaN(thicknessNum) || isNaN(vDieSizeNum) || isNaN(bendLengthNum)) {
-            setResult("Invalid inputs. Please check your entries.");
-            return;
-        }
-
-        // Formula for tons/foot
-        const tonsPerFoot = (575 * Math.pow(thicknessNum, 2)) / vDieSizeNum;
-
-        // Apply material multiplier
-        const multiplier = materialMultipliers[materialType];
-        const adjustedTonsPerFoot = tonsPerFoot * multiplier;
-
-        // Calculate total tonnage
-        const lengthInFeet = bendLengthNum / 12;
-        const totalTonnage = adjustedTonsPerFoot * lengthInFeet;
-
-        // Get recommended V-die
-        const recommendedDie = recommendedVDies[thickness]?.[0] || "No recommendation available";
-
-        // Display the results
-        setResult(
-            `Recommended V-Die Size: ${recommendedDie}\n` +
-            `Tons per Foot: ${adjustedTonsPerFoot.toFixed(2)} tons\n` +
-            `Total Bend Length: ${(bendLengthNum * 0.0254).toFixed(2)} meters\n` +
-            `Total Tonnage Required: ${totalTonnage.toFixed(2)} tons`
-        );
-    };
-
-    return (
-        <div className="HemmingCalculator">
-            <h2>Tonnage Calculator</h2>
-
-            <label>
-                Material Thickness
-                <select value={thickness} onChange={(e) => setThickness(e.target.value)}>
-                    <option value="">Select...</option>
-                    {materialThicknesses.map((thick) => (
-                        <option key={thick} value={thick}>
-                            {thick}
-                        </option>
-                    ))}
-                </select>
-            </label>
-
-            <label>
-                Material Type
-                <select
-                    value={materialType}
-                    onChange={(e) => setMaterialType(e.target.value as keyof typeof materialMultipliers)}
-                >
-                    <option value="MildSteel">Mild Steel (x1.0)</option>
-                    <option value="Aluminum">Aluminum (x0.5)</option>
-                    <option value="StainlessSteel">Stainless Steel (x1.5)</option>
-                    <option value="HighStrengthSteel">High Strength Steel (x2.5)</option>
-                </select>
-            </label>
-
-            <label>
-                V-Die Size
-                <select value={vDieSize} onChange={(e) => setVDieSize(e.target.value)}>
-                    <option value="">Select...</option>
-                    {filteredVDies.map((die) => (
-                        <option
-                            key={die}
-                            value={die}
-                            style={{
-                                backgroundColor:
-                                    recommendedVDies[thickness]?.includes(die) ? "#ffeeba" : "white", // Highlight recommended V-die
-                                fontWeight: recommendedVDies[thickness]?.includes(die) ? "bold" : "normal",
-                            }}
-                        >
-                            {die} {recommendedVDies[thickness]?.includes(die) ? "(Recommended)" : ""}
-                        </option>
-                    ))}
-                </select>
-            </label>
-
-            <label>
-                Total Bend Length (inches)
-                <input
-                    type="number"
-                    value={bendLength}
-                    onChange={(e) => setBendLength(e.target.value)}
-                    placeholder="Enter bend length"
-                />
-            </label>
-
-            <button onClick={handleCalculate}>Calculate</button>
-
-            {result && <div className="result-output">{result}</div>}
-
-            {/* Home Button */}
-            <Link to="/" className="button home-button">
-                Home
-            </Link>
-        </div>
+    setResult(
+      `Recommended V-Die Size: ${unit === "mm" ? `${vDieSize} mm` : `${vDieSize} in`}\n` +
+      `Tons per ${unit === "mm" ? "meter" : "foot"}: ${unit === "mm" ? tonsPerMeter.toFixed(2) : tonsPerFoot.toFixed(2)} tons\n` +
+      `Total Bend Length: ${unit === "mm" ? `${bendLength} mm (${(bendLength as number / 1000).toFixed(2)} m)` : `${bendLength} in (${(bendLength as number / 12).toFixed(2)} ft)`}\n` +
+      `Total Tonnage Required: ${totalTons.toFixed(2)} tons`
     );
+  };
+
+  return (
+    <div className="TonnageCalculator">
+      <h2>Tonnage Calculator</h2>
+
+      <div className="unit-toggle">
+        <span>mm</span>
+        <label className="switch">
+          <input type="checkbox" checked={unit === "in"} onChange={toggleUnit} />
+          <span className="slider round"></span>
+        </label>
+        <span>inch</span>
+      </div>
+      
+      <label>
+        Material Thickness
+        <select value={thickness} onChange={(e) => setThickness(e.target.value === "" ? "" : parseFloat(e.target.value))}>
+          <option value="">Select...</option>
+          {vDieLookup.map((item) => (
+            <option key={item.thickness.mm} value={item.thickness[unit]}>
+              {unit === "mm" ? `${item.thickness.mm} mm` : `${item.thickness.in} in`}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+  Material Type
+  <select value={materialType} onChange={(e) => setMaterialType(e.target.value as keyof typeof materialMultipliers)}>
+    {Object.entries(materialMultipliers).map(([key, value]) => (
+      <option key={key} value={key}>
+        {key.replace(/([A-Z])/g, " $1").trim()} {/* ✅ Insert spaces before uppercase letters */}
+      </option>
+    ))}
+  </select>
+</label>
+
+      <label>V-Die Size ({unit})</label>
+<select value={vDieSize} onChange={(e) => setVDieSize(parseFloat(e.target.value))}>
+  <option value="">Select...</option>
+  {thickness &&
+    getVDieOptions(thickness as number, unit).map((die) => (
+      <option key={die.mm} value={die[unit]}>
+        {die.label}
+      </option>
+    ))}
+</select>
+
+      <label>Total Bend Length ({unit})</label>
+      <input type="number" value={bendLength} onChange={(e) => setBendLength(e.target.value === "" ? "" : parseFloat(e.target.value))} />
+
+      <button onClick={handleCalculate}>Calculate</button>
+      {result && <div className="result-output">{result}</div>}
+      <Link to="/" className="button home-button">Home</Link>
+    </div>
+  );
 };
 
 export default TonnageCalculator;
