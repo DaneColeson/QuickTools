@@ -154,7 +154,7 @@ const DaylightCalculator: React.FC = () => {
       
 
 
-    
+ <div className="section-header">Results</div>
   <div className="results-container">
     <div className="result-item">
       <span className="result-bubble">{availableOpenHeight.toFixed(2)}</span>

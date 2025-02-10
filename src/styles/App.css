@@ -227,7 +227,7 @@ button:hover {
     font-size: 1rem;
     font-weight: bold;
     color: white;
-    background: linear-gradient(120deg, #007aff, #0051ff);
+    background: linear-gradient(120deg, #da5252, #a72d2d);
     border-radius: 20px;
     text-align: center;
     text-decoration: none;
@@ -450,5 +450,53 @@ input:checked + .slider:before {
   
   .interference {
     background: #ff3b30; /* iOS-style red for "Yes" */
+  }
+  
+  /* iOS Style table */
+
+  .list-item span:first-child { /*Item titles*/
+    color: #6d6d72;
+  }
+  
+  .list-item span:last-child { /* Item values */
+    font-weight: regular;
+  }
+
+  .ios-style-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between sections */
+  }
+  
+  .section-header {
+    font-size: 14px;
+    text-align: center;
+    font-weight: regular;
+    color: #6d6d72;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .ios-style-section {
+    background: rgb(243, 243, 243);
+    border-radius: 12px; /* Rounded corners for the entire section */
+    overflow: hidden; /* Ensures corners apply properly */
+    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e5;
+  }
+  
+  /* Remove border from last item to keep it clean */
+  .ios-style-section .list-item:last-child {
+    border-bottom: none;
   }
   

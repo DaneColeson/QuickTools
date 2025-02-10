@@ -10,6 +10,7 @@ import BoxBending from "./BoxBending";
 import MachineSpecGuide from "./MachineSpecGuide";
 import Footer from "./Footer";
 import { UnitProvider } from "./UnitContext"; // ✅ Global Unit Toggle Provider
+import RobotCycleTime from "./RobotCycleTime";
 
 const App: React.FC = () => (
     <UnitProvider>
@@ -23,6 +24,7 @@ const App: React.FC = () => (
                     <Route path="/daylight-calculator" element={<DaylightCalculator />} />
                     <Route path="/box-bending" element={<BoxBending />} />
                     <Route path="/machine-spec" element={<MachineSpecGuide />} />
+                    <Route path="/robot-cycletime" element={<RobotCycleTime />} />
                     <Route path="*" element={<div>404 - Page Not Found</div>} />
                 </Routes>
                 <Footer />

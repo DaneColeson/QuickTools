@@ -93,6 +93,7 @@ const HemmingCalculator: React.FC = () => {
       />
 
       {/* ✅ Results displayed in iOS-style bubbles (Always Visible) */}
+      <div className="section-header">Results</div>
       <div className="results-container">
         <div className="result-item">
           <span className="result-bubble">{bendLengthConverted.toFixed(2)} {bendLengthDisplayUnit}</span>

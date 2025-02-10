@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/App.css";
 import { useUnit } from "./UnitContext"; // ✅ Import global unit context
@@ -38,23 +38,13 @@ const BoxBendingCalculator: React.FC = () => {
 
   const [clampingStyle, setClampingStyle] = useState<ClampingStyle>("European");
   const [machineType, setMachineType] = useState<MachineType>("BB");
-  const [boxHeight, setBoxHeight] = useState<string>("");
+  const [boxHeight, setBoxHeight] = useState<string | undefined>(undefined);
   const [punchExtension, setPunchExtension] = useState<number>(0);
   const [extendedOpenHeight, setExtendedOpenHeight] = useState<number>(0);
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<React.ReactNode>(null);
 
   const conversionFactor = unit === "in" ? 0.03937 : 1;
   const unitLabel = unit === "in" ? "inches" : "mm";
-
-  const punchExtensionValues = [0, 50, 100, 150, 200].map((value) => ({
-    mm: value,
-    in: parseFloat((value * 0.03937).toFixed(2)),
-  }));
-
-  const extendedOpenHeightValues = [0, 100, 200].map((value) => ({
-    mm: value,
-    in: parseFloat((value * 0.03937).toFixed(2)),
-  }));
 
   const handleCalculate = () => {
     if (!boxHeight) {
@@ -68,7 +58,7 @@ const BoxBendingCalculator: React.FC = () => {
       return;
     }
 
-    const ramWidth = ramWidths[machineType] || 0;
+    const ramWidth = ramWidths[machineType as MachineType] || 0;
     const toolHeight = boxHeightNum / 0.707 + ramWidth * 0.563;
 
     const baseOpenHeight = machineType.startsWith("BB")
@@ -77,7 +67,7 @@ const BoxBendingCalculator: React.FC = () => {
       ? openHeights.BH
       : openHeights.PA;
 
-    const clampingStyleConfig = clampingStyles[clampingStyle];
+    const clampingStyleConfig = clampingStyles[clampingStyle as ClampingStyle];
     const reducedOpenHeight =
       baseOpenHeight - clampingStyleConfig.clamp - clampingStyleConfig.die + extendedOpenHeight + punchExtension;
 
@@ -90,12 +80,41 @@ const BoxBendingCalculator: React.FC = () => {
     const convertedDaylight = (daylight * conversionFactor).toFixed(2);
 
     setResult(
-      `Tool Height Requirement: ${convertedToolHeight} ${unitLabel}\n` +
-        `Total Open Height Available: ${convertedOpenHeight} ${unitLabel}\n` +
-        `Available Daylight: ${convertedDaylight} ${unitLabel}\n` +
-        `Open Height Availability: ${hasSufficientHeight ? "Yes" : "No"}`
+      <div className="results-container">
+        <div className="result-item">
+          <span className="result-bubble">{convertedToolHeight}</span>
+          <span className="result-label">Tool Height Requirement ({unitLabel})</span>
+        </div>
+        <div className="result-item">
+          <span className="result-bubble">{convertedOpenHeight}</span>
+          <span className="result-label">Total Open Height Available ({unitLabel})</span>
+        </div>
+        <div className="result-item">
+          <span className="result-bubble">{convertedDaylight}</span>
+          <span className="result-label">Available Daylight ({unitLabel})</span>
+        </div>
+        <div className="result-item">
+          <span className={`result-bubble ${hasSufficientHeight ? "" : "interference"}`}>{hasSufficientHeight ? "Yes" : "No"}</span>
+          <span className="result-label">Open Height Availability</span>
+        </div>
+      </div>
     );
   };
+
+  useEffect(() => {
+    handleCalculate();
+  }, [boxHeight, clampingStyle, extendedOpenHeight, machineType, punchExtension, unit, conversionFactor]);
+
+  const punchExtensionValues = [0, 50, 100, 150, 200].map((value) => ({
+    mm: value,
+    in: parseFloat((value * 0.03937).toFixed(2)),
+  }));
+
+  const extendedOpenHeightValues = [0, 100, 200].map((value) => ({
+    mm: value,
+    in: parseFloat((value * 0.03937).toFixed(2)),
+  }));
+
 
   return (
     <div className="BoxBendingCalculator">
@@ -158,10 +177,8 @@ const BoxBendingCalculator: React.FC = () => {
           ))}
         </select>
       </label>
-
-      <button onClick={handleCalculate}>Calculate</button>
-
-      {result && <div className="result-output">{result}</div>}
+      <div className="section-header">Results</div>
+      {result}
 
       <Link to="/" className="button home-button">
         Home

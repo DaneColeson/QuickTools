@@ -59,6 +59,13 @@ const Home: React.FC = () => (
                         <div className="subtext">View detailed specs of each machine</div>
                     </div>
                 </Link>
+                <Link to="/robot-cycletime" className="icon icon-orange">
+                <SpecIcon width={50} height={50} />
+                    <div className="icon-content">
+                        <span>Robot Cycle Time</span>
+                        <div className="subtext">View detailed specs of each machine</div>
+                    </div>
+                </Link>
             </div>
         </main>
     </div>

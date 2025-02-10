@@ -771,36 +771,47 @@ const MachineSpecGuide: React.FC = () => {
       </select>
 
       {selectedMachine && (
-        <table className="machine-spec-table">
-          <tbody>
-            <tr><td><b>Force</b></td><td>{machineSpecs[selectedMachine].force.ton} Ton, {machineSpecs[selectedMachine].force.usTon} US Ton</td></tr>
-            <tr><td><b>Bending Length</b></td><td>{machineSpecs[selectedMachine].bendingLength[unit as keyof typeof machineSpecs.BB306.bendingLength]} {unit}</td></tr>
-            <tr><td><b>Distance Between Frames</b></td><td>{machineSpecs[selectedMachine].distanceBetweenFrames[unit as keyof typeof machineSpecs.BB306.distanceBetweenFrames]} {unit}</td></tr>
-            <tr><td><b>Table Width</b></td><td>{machineSpecs[selectedMachine].tableWidth[unit as keyof typeof machineSpecs.BB306.tableWidth]} {unit}</td></tr>
-            <tr><td><b>Open Height w/o Tool Holders</b></td><td>{machineSpecs[selectedMachine].openHeight[unit as keyof typeof machineSpecs.BB306.openHeight]} {unit}</td></tr>
-            <tr><td><b>Ram Stroke</b></td><td>{machineSpecs[selectedMachine].ramStroke[unit as keyof typeof machineSpecs.BB306.ramStroke]} {unit}</td></tr>
-            <tr><td><b>Throat Depth</b></td><td>{machineSpecs[selectedMachine].throatDepth[unit as keyof typeof machineSpecs.BB306.throatDepth]} {unit}</td></tr>
-            
-            <tr><td colSpan={2}><b>Ram Speeds</b></td></tr>
-            <tr><td>Approach</td><td>{machineSpecs[selectedMachine].ramSpeeds.approach[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-            <tr><td>Bending</td><td>{machineSpecs[selectedMachine].ramSpeeds.bending[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-            <tr><td>Return</td><td>{machineSpecs[selectedMachine].ramSpeeds.return[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-            
-            <tr><td colSpan={2}><b>Backgauge Speed</b></td></tr>
-            <tr><td>Front to Back</td><td>{machineSpecs[selectedMachine].backgaugeSpeed.frontBack[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-            <tr><td>Side to Side</td><td>{machineSpecs[selectedMachine].backgaugeSpeed.sideSide[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-            <tr><td>Up and Down</td><td>{machineSpecs[selectedMachine].backgaugeSpeed.upDown[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-            
-            <tr><td colSpan={2}><b>Machine Size</b></td></tr>
-            <tr><td>Length</td><td>{machineSpecs[selectedMachine].machineSize.length[unit as keyof typeof machineSpecs.BB306.machineSize.length]} {unit}</td></tr>
-            <tr><td>Width</td><td>{machineSpecs[selectedMachine].machineSize.width[unit as keyof typeof machineSpecs.BB306.machineSize.width]} {unit}</td></tr>
-            <tr><td>Height</td><td>{machineSpecs[selectedMachine].machineSize.height[unit as keyof typeof machineSpecs.BB306.machineSize.height]} {unit}</td></tr>
-            
-            <tr><td><b>Power Requirements</b></td><td>{machineSpecs[selectedMachine].power.kva} kVA</td></tr>
-            <tr><td><b>Machine Weight</b></td><td>{machineSpecs[selectedMachine].weight.kg} kg, {machineSpecs[selectedMachine].weight.lbs} lbs</td></tr>
-          </tbody>
-        </table>
-      )}
+  <div className="ios-style-list">
+    <div className="section-header">Machine Specifications</div>
+    <div className="ios-style-section">
+      <div className="list-item"><span>Force</span><span><b>{machineSpecs[selectedMachine].force.ton}</b> Ton, <b>{machineSpecs[selectedMachine].force.usTon}</b> US Ton</span></div>
+      <div className="list-item"><span>Bending Length</span><span><b>{machineSpecs[selectedMachine].bendingLength[unit]}</b> {unit}</span></div>
+      <div className="list-item"><span>Distance Between Frames</span><span><b>{machineSpecs[selectedMachine].distanceBetweenFrames[unit]}</b> {unit}</span></div>
+      <div className="list-item"><span>Table Width</span><span><b>{machineSpecs[selectedMachine].tableWidth[unit]}</b> {unit}</span></div>
+      <div className="list-item"><span>Open Height w/o Tool Holders</span><span><b>{machineSpecs[selectedMachine].openHeight[unit]}</b> {unit}</span></div>
+      <div className="list-item"><span>Ram Stroke</span><span><b>{machineSpecs[selectedMachine].ramStroke[unit]}</b> {unit}</span></div>
+      <div className="list-item"><span>Throat Depth</span><span><b>{machineSpecs[selectedMachine].throatDepth[unit]}</b> {unit}</span></div>
+    </div>
+
+    <div className="section-header">Ram Speeds</div>
+    <div className="ios-style-section">
+      <div className="list-item"><span>Approach</span><span><b>{machineSpecs[selectedMachine].ramSpeeds.approach[unit === "mm" ? "mmSec" : "inMin"]}</b> {unit === "mm" ? "mm/sec" : "in/min"}</span></div>
+      <div className="list-item"><span>Bending</span><span><b>{machineSpecs[selectedMachine].ramSpeeds.bending[unit === "mm" ? "mmSec" : "inMin"]}</b> {unit === "mm" ? "mm/sec" : "in/min"}</span></div>
+      <div className="list-item"><span>Return</span><span><b>{machineSpecs[selectedMachine].ramSpeeds.return[unit === "mm" ? "mmSec" : "inMin"]}</b> {unit === "mm" ? "mm/sec" : "in/min"}</span></div>
+    </div>
+
+    <div className="section-header">Backgauge Speed</div>
+    <div className="ios-style-section">
+      <div className="list-item"><span>Front/Back</span><span><b>{machineSpecs[selectedMachine].backgaugeSpeed.frontBack[unit === "mm" ? "mmSec" : "inMin"]}</b> {unit === "mm" ? "mm/sec" : "in/min"}</span></div>
+      <div className="list-item"><span>Side/Side</span><span><b>{machineSpecs[selectedMachine].backgaugeSpeed.sideSide[unit === "mm" ? "mmSec" : "inMin"]}</b> {unit === "mm" ? "mm/sec" : "in/min"}</span></div>
+      <div className="list-item"><span>Up/Down</span><span><b>{machineSpecs[selectedMachine].backgaugeSpeed.upDown[unit === "mm" ? "mmSec" : "inMin"]}</b> {unit === "mm" ? "mm/sec" : "in/min"}</span></div>
+    </div>
+
+    <div className="section-header">Machine Size</div>
+    <div className="ios-style-section">
+      <div className="list-item"><span>Length</span><span><b>{machineSpecs[selectedMachine].machineSize.length[unit]}</b> {unit}</span></div>
+      <div className="list-item"><span>Width</span><span><b>{machineSpecs[selectedMachine].machineSize.width[unit]}</b> {unit}</span></div>
+      <div className="list-item"><span>Height</span><span><b>{machineSpecs[selectedMachine].machineSize.height[unit]}</b> {unit}</span></div>
+    </div>
+
+    <div className="section-header">Power & Weight</div>
+    <div className="ios-style-section">
+      <div className="list-item"><span>Power Requirements</span><span><b>{machineSpecs[selectedMachine].power.kva}</b> kVA</span></div>
+      <div className="list-item"><span>Machine Weight</span><span><b>{machineSpecs[selectedMachine].weight.kg}</b> kg, <b>{machineSpecs[selectedMachine].weight.lbs}</b> lbs</span></div>
+    </div>
+  </div>
+)}
+
       {/* Home Button */}
                   <Link to="/" className="button home-button">
                       Home
