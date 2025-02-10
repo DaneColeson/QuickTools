@@ -36,7 +36,7 @@ const TonnageCalculator: React.FC = () => {
   const [materialType, setMaterialType] = useState<keyof typeof materialMultipliers>("MildSteel");
   const [vDieSize, setVDieSize] = useState<number | "">("");
   const [bendLength, setBendLength] = useState<number | "">("");
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<React.ReactNode | null>(null);
 
   const getVDieOptions = (thickness: number, unit: "mm" | "in") => {
     // Find the entry that directly matches the selected thickness in the current unit
@@ -75,19 +75,35 @@ const TonnageCalculator: React.FC = () => {
     }
 
     const multiplier = materialMultipliers[materialType];
-    const tonsPerFoot = multiplier * ((575 * Math.pow(thickness as number, 2)) / (vDieSize as number));
-    const tonsPerMeter = tonsPerFoot / 7.74192;
-    const totalTons = unit === "mm"
-      ? tonsPerMeter * ((bendLength as number) / 1000)
-      : tonsPerFoot * ((bendLength as number) / 12);
 
-    setResult(
-      `Recommended V-Die Size: ${unit === "mm" ? `${vDieSize} mm` : `${vDieSize} in`}\n` +
-      `Tons per ${unit === "mm" ? "meter" : "foot"}: ${unit === "mm" ? tonsPerMeter.toFixed(2) : tonsPerFoot.toFixed(2)} tons\n` +
-      `Total Bend Length: ${unit === "mm" ? `${bendLength} mm (${(bendLength as number / 1000).toFixed(2)} m)` : `${bendLength} in (${(bendLength as number / 12).toFixed(2)} ft)`}\n` +
-      `Total Tonnage Required: ${totalTons.toFixed(2)} tons`
-    );
-  };
+// ✅ Tons per Foot (Imperial formula)
+const tonsPerFoot = ((575 * Math.pow(thickness as number, 2)) / (vDieSize as number)) * multiplier;
+
+// ✅ Corrected Tons per Meter (Direct metric conversion)
+const tonsPerMeter = tonsPerFoot / 7.74; // ✅ Convert from tons/foot → tons/meter
+
+// ✅ Correct Total Tonnage Calculation
+const totalTons = unit === "mm"
+  ? tonsPerMeter * ((bendLength as number) / 1000) // Convert bend length from mm to meters
+  : tonsPerFoot * ((bendLength as number) / 12);  // Convert bend length from inches to feet
+
+  setResult(
+    <div className="results-container">
+      <div className="result-item">
+        <span className="result-bubble">{vDieSize} {unit}</span>
+        <span className="result-label">V-Die Size</span>
+      </div>
+      <div className="result-item">
+        <span className="result-bubble">{tonsPerMeter.toFixed(2)} tons</span>
+        <span className="result-label">Adjusted Tons/{unit === "in" ? "Foot" : "Meter"}</span>
+      </div>
+      <div className="result-item">
+        <span className="result-bubble">{totalTons.toFixed(2)} tons</span>
+        <span className="result-label">Total Tonnage Required</span>
+      </div>
+    </div>
+  );
+    };
 
   return (
     <div className="TonnageCalculator">
@@ -140,7 +156,7 @@ const TonnageCalculator: React.FC = () => {
       <input type="number" value={bendLength} onChange={(e) => setBendLength(e.target.value === "" ? "" : parseFloat(e.target.value))} />
 
       <button onClick={handleCalculate}>Calculate</button>
-      {result && <div className="result-output">{result}</div>}
+      {result && <div>{result}</div>}
       <Link to="/" className="button home-button">Home</Link>
     </div>
   );

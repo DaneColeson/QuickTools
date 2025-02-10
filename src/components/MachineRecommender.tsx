@@ -94,7 +94,6 @@ const MachineRecommender: React.FC = () => {
     const totalTonnage = lengthInFeet * adjustedTonsPerFoot;
 
     const machines = machineGroups[machineType as keyof typeof machineGroups];
-
     const recommendedMachine = machines.find(
       (machine) =>
         machine.capacity >= totalTonnage &&
@@ -102,25 +101,30 @@ const MachineRecommender: React.FC = () => {
     );
 
     setResult(
-      recommendedMachine ? (
-        <>
-          <div>V-Die Size: {vDieSize} {unit}</div>
-          <div>Adjusted Tons/Foot: {adjustedTonsPerFoot.toFixed(2)} tons</div>
-          <div>Total Bend Length: {bendLengthNum} {unit}</div>
-          <div>Total Tonnage Required: {totalTonnage.toFixed(2)} tons</div>
-          <div>
-            <strong>
-              Recommended Machine: {recommendedMachine.name} (Capacity: {recommendedMachine.capacity} tons, Length:{" "}
-              {unit === "mm" ? recommendedMachine.length + " mm" : (recommendedMachine.length / 25.4).toFixed(1) + " in"})
-            </strong>
-          </div>
-        </>
-      ) : (
-        "No suitable machine available."
-      )
+      <div className="results-container">
+        <div className="result-item">
+          <span className="result-bubble">{totalTonnage.toFixed(2)} tons</span>
+          <span className="result-label">Total Tonnage Required</span>
+        </div>
+        <div className="result-item">
+          <span className={`result-bubble ${recommendedMachine ? "" : "interference"}`}>{recommendedMachine ? recommendedMachine.name : "N/A"}</span>
+          <span className="result-label">Recommended Machine</span>
+        </div>
+        {recommendedMachine && (
+          <>
+            <div className="result-item">
+              <span className="result-bubble">{recommendedMachine.capacity} tons</span>
+              <span className="result-label">Max Machine Tonnage</span>
+            </div>
+            <div className="result-item">
+              <span className="result-bubble">{unit === "mm" ? recommendedMachine.length + " mm" : (recommendedMachine.length / 25.4).toFixed(1) + " in"}</span>
+              <span className="result-label">Max Machine Length</span>
+            </div>
+          </>
+        )}
+      </div>
     );
   };
-
   return (
     <div className="MachineRecommender">
       <h2>Machine Recommender</h2>
@@ -167,7 +171,7 @@ const MachineRecommender: React.FC = () => {
 
       <button onClick={handleCalculate}>Calculate</button>
 
-      {result && <div className="result-output">{result}</div>}
+      {result}
 
       <Link to="/" className="button home-button">
         Home
