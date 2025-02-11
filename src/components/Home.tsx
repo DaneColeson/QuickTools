@@ -6,6 +6,7 @@ import { default as MachineRecommenderIcon } from "../assets/MachineRecommenderI
 import { default as BoxIcon } from "../assets/BoxIcon";
 import { default as HemmingIcon } from "../assets/HemmingIcon";
 import { default as SpecIcon } from "../assets/SpecIcon";
+import { default as RobotIcon } from "../assets/RobotIcon";
 
 const Home: React.FC = () => (
     <div className="home-container">
@@ -49,21 +50,21 @@ const Home: React.FC = () => (
                 <MachineRecommenderIcon width={50} height={50} />
                     <div className="icon-content">
                         <span>Daylight Calculator</span>
-                        <div className="subtext">Determine available Daylight depending on tool and machine configuration</div>
+                        <div className="subtext">Find available Daylight depending on tool and machine info</div>
                     </div>
                 </Link>
                 <Link to="/machine-spec" className="icon icon-red">
                 <SpecIcon width={50} height={50} />
                     <div className="icon-content">
                         <span>Machine Spec Guide</span>
-                        <div className="subtext">View detailed specs of each machine</div>
+                        <div className="subtext">View detailed technical information of each machine</div>
                     </div>
                 </Link>
                 <Link to="/robot-cycletime" className="icon icon-orange">
-                <SpecIcon width={50} height={50} />
+                <RobotIcon width={50} height={50} />
                     <div className="icon-content">
                         <span>Robot Cycle Time</span>
-                        <div className="subtext">View detailed specs of each machine</div>
+                        <div className="subtext">Estimate Robot cycle times based on part information</div>
                     </div>
                 </Link>
             </div>

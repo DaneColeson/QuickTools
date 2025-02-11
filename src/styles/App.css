@@ -43,7 +43,7 @@ body {
     align-items: center;
     background-color: #f9f9f9;
     padding: 10px 0;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #333;
 }
@@ -498,5 +498,16 @@ input:checked + .slider:before {
   /* Remove border from last item to keep it clean */
   .ios-style-section .list-item:last-child {
     border-bottom: none;
+  }
+  
+/* Rows for Width and Height in Robot Calculator */
+.input-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .input-row div {
+    flex: 1;
+    min-width: 0;
   }
   

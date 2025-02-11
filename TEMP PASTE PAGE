@@ -1,30 +1,9 @@
-{selectedMachine && (
-  <table className="machine-spec-table">
-    <tbody>
-      <tr><td>Force</td><td>{machineSpecs[selectedMachine].force.ton} Ton, {machineSpecs[selectedMachine].force.usTon} US Ton</td></tr>
-      <tr><td><b>Bending Length</b></td><td>{machineSpecs[selectedMachine].bendingLength[unit as keyof typeof machineSpecs.BB306.bendingLength]} {unit}</td></tr>
-      <tr><td><b>Distance Between Frames</b></td><td>{machineSpecs[selectedMachine].distanceBetweenFrames[unit as keyof typeof machineSpecs.BB306.distanceBetweenFrames]} {unit}</td></tr>
-      <tr><td><b>Table Width</b></td><td>{machineSpecs[selectedMachine].tableWidth[unit as keyof typeof machineSpecs.BB306.tableWidth]} {unit}</td></tr>
-      <tr><td><b>Open Height w/o Tool Holders</b></td><td>{machineSpecs[selectedMachine].openHeight[unit as keyof typeof machineSpecs.BB306.openHeight]} {unit}</td></tr>
-      <tr><td><b>Ram Stroke</b></td><td>{machineSpecs[selectedMachine].ramStroke[unit as keyof typeof machineSpecs.BB306.ramStroke]} {unit}</td></tr>
-      <tr><td><b>Throat Depth</b></td><td>{machineSpecs[selectedMachine].throatDepth[unit as keyof typeof machineSpecs.BB306.throatDepth]} {unit}</td></tr>
-      
-      <tr><td colSpan={2}><b>Ram Speeds</b></td></tr>
-      <tr><td>Approach</td><td>{machineSpecs[selectedMachine].ramSpeeds.approach[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-      <tr><td>Bending</td><td>{machineSpecs[selectedMachine].ramSpeeds.bending[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-      <tr><td>Return</td><td>{machineSpecs[selectedMachine].ramSpeeds.return[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-      
-      <tr><td colSpan={2}><b>Backgauge Speed</b></td></tr>
-      <tr><td>Front to Back</td><td>{machineSpecs[selectedMachine].backgaugeSpeed.frontBack[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-      <tr><td>Side to Side</td><td>{machineSpecs[selectedMachine].backgaugeSpeed.sideSide[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-      <tr><td>Up and Down</td><td>{machineSpecs[selectedMachine].backgaugeSpeed.upDown[unit === "mm" ? "mmSec" : "inMin"]} {unit === "mm" ? "mm/sec" : "in/min"}</td></tr>
-      
-      <tr><td colSpan={2}><b>Machine Size</b></td></tr>
-      <tr><td>Length</td><td>{machineSpecs[selectedMachine].machineSize.length[unit as keyof typeof machineSpecs.BB306.machineSize.length]} {unit}</td></tr>
-      <tr><td>Width</td><td>{machineSpecs[selectedMachine].machineSize.width[unit as keyof typeof machineSpecs.BB306.machineSize.width]} {unit}</td></tr>
-      <tr><td>Height</td><td>{machineSpecs[selectedMachine].machineSize.height[unit as keyof typeof machineSpecs.BB306.machineSize.height]} {unit}</td></tr>
-      
-      <tr><td><b>Power Requirements</b></td><td>{machineSpecs[selectedMachine].power.kva} kVA</td></tr>
-      <tr><td><b>Machine Weight</b></td><td>{machineSpecs[selectedMachine].weight.kg} kg, {machineSpecs[selectedMachine].weight.lbs} lbs</td></tr>
-    </tbody>
-  </table>
+const robots = [
+  { name: "Mitsubishi RV13", maxPayload: 10 },
+  { name: "Fanuc M20iD/25", maxPayload: 20 },
+  { name: "Fanuc M20iD/35", maxPayload: 30 },
+  { name: "Fanuc M710iC/70", maxPayload: 65 },
+  { name: "Fanuc R-2000iC/165R", maxPayload: 160 },
+  { name: "Fanuc R-2000iC/210R", maxPayload: 205 },
+  { name: "Fanuc R-2000iC/270R", maxPayload: 265 },
+];
