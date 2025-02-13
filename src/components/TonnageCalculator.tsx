@@ -24,16 +24,18 @@ const vDieLookup = [
 ];
 
 const materialMultipliers = {
-  MildSteel: 1,
-  Aluminum: 0.5,
-  StainlessSteel: 1.5,
-  HighStrengthSteel: 2.5,
+  "Select...": 0,
+  "Mild Steel (60ski)": 1,
+  "Aluminum 5052 (30ksi)": 0.5,
+  "Stainless Steel 304 (90ksi)": 1.5,
+  "Structural Steel (120ksi)": 2,
+  "High Strength Steel (150ksi)": 2.5,
 };
 
 const TonnageCalculator: React.FC = () => {
   const { unit, toggleUnit } = useUnit();
   const [thickness, setThickness] = useState<number | "">("");
-  const [materialType, setMaterialType] = useState<keyof typeof materialMultipliers>("MildSteel");
+  const [materialType, setMaterialType] = useState<keyof typeof materialMultipliers>("Select...");
   const [vDieSize, setVDieSize] = useState<number | "">("");
   const [bendLength, setBendLength] = useState<number | "">("");
   const [result, setResult] = useState<React.ReactNode | null>(null);
@@ -80,7 +82,7 @@ const TonnageCalculator: React.FC = () => {
 const tonsPerFoot = ((575 * Math.pow(thickness as number, 2)) / (vDieSize as number)) * multiplier;
 
 // ✅ Corrected Tons per Meter (Direct metric conversion)
-const tonsPerMeter = tonsPerFoot / 7.74; // ✅ Convert from tons/foot → tons/meter
+const tonsPerMeter = (((575 * Math.pow(thickness as number, 2)) / (vDieSize as number)) * multiplier) / 7.74; // ✅ Convert from tons/foot → tons/meter
 
 // ✅ Correct Total Tonnage Calculation
 const totalTons = unit === "mm"
@@ -94,12 +96,16 @@ const totalTons = unit === "mm"
         <span className="result-label">V-Die Size</span>
       </div>
       <div className="result-item">
-        <span className="result-bubble">{tonsPerMeter.toFixed(2)} tons</span>
-        <span className="result-label">Adjusted Tons/{unit === "in" ? "Foot" : "Meter"}</span>
+        <span className="result-bubble">{unit === "in" ? tonsPerFoot.toFixed(2) : tonsPerMeter.toFixed(2)} tons</span>
+        <span className="result-label">Tons/{unit === "in" ? "Foot" : "Meter"}</span>
       </div>
       <div className="result-item">
         <span className="result-bubble">{totalTons.toFixed(2)} tons</span>
         <span className="result-label">Total Tonnage Required</span>
+      </div>
+      <div className="result-item">
+        <span className="result-bubble">{materialMultipliers[materialType]}</span>
+        <span className="result-label">Multiplyer</span>
       </div>
     </div>
   );

@@ -425,8 +425,11 @@ input:checked + .slider:before {
   .result-item {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    min-width: 120px;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-width: 80px;
   }
   
   .result-bubble {
@@ -437,11 +440,12 @@ input:checked + .slider:before {
     border-radius: 20px;
     font-size: 16px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    min-width: 100px;
+    min-width: 80px;
     text-align: center;
   }
   
   .result-label {
+    display: flex;
     font-size: 14px;
     font-weight: bold;
     margin-top: 5px;
