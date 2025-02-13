@@ -70,7 +70,7 @@ const RobotCycleTime: React.FC = () => {
         <div className="ios-style-section">
           <div className="list-item"><span>Selected Robot</span><span><b>{selectedRobot.name}</b></span></div>
           <div className="list-item"><span>Cycle Time per Part</span><span><b>{adjustedCycleTime.toFixed(2)}</b> sec</span></div>
-          <div className="list-item"><span>Cycle Time for {quantity} {quantityQualifier}</span><span><b>{convertToTime(totalCycleTime)}</b></span></div>
+          <div className="list-item"><span>Total Time</span><span><b>{convertToTime(totalCycleTime)}</b></span></div>
         </div>
       </div>
     );
@@ -135,7 +135,7 @@ const RobotCycleTime: React.FC = () => {
         {quantityOptions.map((q) => (
           <option key={q} value={q}>{q}</option>
         ))}
-      </select>
+      </select> 
       
       <button onClick={calculateCycleTime}>Calculate</button>
       {result}

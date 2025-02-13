@@ -52,14 +52,14 @@ const BoxBendingCalculator: React.FC = () => {
       return;
     }
 
-    const boxHeightNum = parseFloat(boxHeight);
+    const boxHeightNum = parseFloat(boxHeight) / (unit === "in" ? 0.03937 : 1);
     if (isNaN(boxHeightNum)) {
       setResult("Invalid box height. Please enter a numerical value.");
       return;
     }
 
     const ramWidth = ramWidths[machineType as MachineType] || 0;
-    const toolHeight = boxHeightNum / 0.707 + ramWidth * 0.563;
+    const toolHeight = (boxHeightNum / 0.707) + (ramWidth * 0.563);
 
     const baseOpenHeight = machineType.startsWith("BB")
       ? openHeights.BB
@@ -75,7 +75,7 @@ const BoxBendingCalculator: React.FC = () => {
     const hasSufficientHeight = daylight >= 0;
 
     // Convert results based on the selected unit
-    const convertedToolHeight = (toolHeight * conversionFactor).toFixed(2);
+    const convertedToolHeight = unit === "in" ? (toolHeight * 0.03937).toFixed(2) : toolHeight.toFixed(2);
     const convertedOpenHeight = (reducedOpenHeight * conversionFactor).toFixed(2);
     const convertedDaylight = (daylight * conversionFactor).toFixed(2);
 
@@ -83,19 +83,19 @@ const BoxBendingCalculator: React.FC = () => {
       <div className="results-container">
         <div className="result-item">
           <span className="result-bubble">{convertedToolHeight}</span>
-          <span className="result-label">Tool Height Requirement ({unitLabel})</span>
+          <span className="result-label">Tool Height Required</span>
         </div>
         <div className="result-item">
           <span className="result-bubble">{convertedOpenHeight}</span>
-          <span className="result-label">Total Open Height Available ({unitLabel})</span>
+          <span className="result-label">Available Open Height</span>
         </div>
         <div className="result-item">
           <span className="result-bubble">{convertedDaylight}</span>
-          <span className="result-label">Available Daylight ({unitLabel})</span>
+          <span className="result-label">Available Daylight After Tools</span>
         </div>
         <div className="result-item">
           <span className={`result-bubble ${hasSufficientHeight ? "" : "interference"}`}>{hasSufficientHeight ? "Yes" : "No"}</span>
-          <span className="result-label">Open Height Availability</span>
+          <span className="result-label">Open Height Available</span>
         </div>
       </div>
     );
@@ -104,6 +104,19 @@ const BoxBendingCalculator: React.FC = () => {
   useEffect(() => {
     handleCalculate();
   }, [boxHeight, clampingStyle, extendedOpenHeight, machineType, punchExtension, unit, conversionFactor]);
+
+  useEffect(() => {
+    if (boxHeight) {
+      const numericBoxHeight = parseFloat(boxHeight);
+      if (!isNaN(numericBoxHeight)) {
+        // Convert box height when the unit is changed
+        const convertedBoxHeight =
+          unit === "in" ? (numericBoxHeight * 0.03937).toFixed(2) : (numericBoxHeight / 0.03937).toFixed(2);
+        setBoxHeight(convertedBoxHeight);
+      }
+    }
+  }, [unit]);
+  
 
   const punchExtensionValues = [0, 50, 100, 150, 200].map((value) => ({
     mm: value,
@@ -114,6 +127,8 @@ const BoxBendingCalculator: React.FC = () => {
     mm: value,
     in: parseFloat((value * 0.03937).toFixed(2)),
   }));
+
+
 
 
   return (
@@ -184,7 +199,14 @@ const BoxBendingCalculator: React.FC = () => {
         Home
       </Link>
     </div>
+
+
+    
+  
   );
+
 };
+
+
 
 export default BoxBendingCalculator;

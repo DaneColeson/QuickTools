@@ -158,11 +158,11 @@ const DaylightCalculator: React.FC = () => {
   <div className="results-container">
     <div className="result-item">
       <span className="result-bubble">{availableOpenHeight.toFixed(2)}</span>
-      <span className="result-label">Available Open Height</span>
+      <span className="result-label">Machine Open Height</span>
     </div>
     <div className="result-item">
       <span className="result-bubble">{daylight.toFixed(2)}</span>
-      <span className="result-label">Available Daylight</span>
+      <span className="result-label">Daylight with Tools</span>
     </div>
     <div className="result-item">
       <span className={`result-bubble ${hasInterference ? "interference" : ""}`}>

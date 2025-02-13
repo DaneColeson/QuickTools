@@ -103,8 +103,8 @@ const MachineRecommender: React.FC = () => {
     setResult(
       <div className="results-container">
         <div className="result-item">
-          <span className="result-bubble">{totalTonnage.toFixed(2)} tons</span>
-          <span className="result-label">Total Tonnage Required</span>
+          <span className="result-bubble">{totalTonnage.toFixed(2)}</span>
+          <span className="result-label">Total Tonnage</span>
         </div>
         <div className="result-item">
           <span className={`result-bubble ${recommendedMachine ? "" : "interference"}`}>{recommendedMachine ? recommendedMachine.name : "N/A"}</span>
@@ -113,11 +113,11 @@ const MachineRecommender: React.FC = () => {
         {recommendedMachine && (
           <>
             <div className="result-item">
-              <span className="result-bubble">{recommendedMachine.capacity} tons</span>
+              <span className="result-bubble">{recommendedMachine.capacity}</span>
               <span className="result-label">Max Machine Tonnage</span>
             </div>
             <div className="result-item">
-              <span className="result-bubble">{unit === "mm" ? recommendedMachine.length + " mm" : (recommendedMachine.length / 25.4).toFixed(1) + " in"}</span>
+              <span className="result-bubble">{unit === "mm" ? recommendedMachine.length : (recommendedMachine.length / 25.4).toFixed(1)}</span>
               <span className="result-label">Max Machine Length</span>
             </div>
           </>

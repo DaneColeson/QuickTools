@@ -92,16 +92,16 @@ const totalTons = unit === "mm"
   setResult(
     <div className="results-container">
       <div className="result-item">
-        <span className="result-bubble">{vDieSize} {unit}</span>
+        <span className="result-bubble">{vDieSize}</span>
         <span className="result-label">V-Die Size</span>
       </div>
       <div className="result-item">
-        <span className="result-bubble">{unit === "in" ? tonsPerFoot.toFixed(2) : tonsPerMeter.toFixed(2)} tons</span>
+        <span className="result-bubble">{unit === "in" ? tonsPerFoot.toFixed(2) : tonsPerMeter.toFixed(2)}</span>
         <span className="result-label">Tons/{unit === "in" ? "Foot" : "Meter"}</span>
       </div>
       <div className="result-item">
-        <span className="result-bubble">{totalTons.toFixed(2)} tons</span>
-        <span className="result-label">Total Tonnage Required</span>
+        <span className="result-bubble">{totalTons.toFixed(2)}</span>
+        <span className="result-label">Total Tonnage</span>
       </div>
       <div className="result-item">
         <span className="result-bubble">{materialMultipliers[materialType]}</span>
