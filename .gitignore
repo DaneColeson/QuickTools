@@ -1,0 +1,6 @@
+node_modules
+node_modules
+dist
+dist/*
+dist/win-unpacked/Quick Tools.exe
+dist/win-unpacked/resources/app.asar

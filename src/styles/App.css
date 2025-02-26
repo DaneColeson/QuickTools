@@ -1,0 +1,517 @@
+/* --- Universal Reset & Global Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* --- Global Layout for Full-Screen Scaling --- */
+.container {
+    max-width: 100vw; /* Ensure it scales to full width */
+    min-height: 100vh; /* Ensure it takes full screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* --- Ensure Home Page Takes Full Screen Width --- */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center content */
+    width: 100%;
+    min-height: 100vh; /* Full height */
+    padding: 20px;
+}
+
+/* --- Navigation Bar --- */
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 10px 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* --- Headings --- */
+h1, h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+    font-weight:bold;
+}
+
+/* --- Form Labels & Inputs --- */
+label {
+    display: block;
+    font-size: 1rem;
+    margin: 10px 0 5px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border: 2px solid #007aff; /* iOS blue accent */
+    background: white;
+}
+
+/* --- Buttons --- */
+button {
+    display: block;
+    width: 80%;
+    padding: 14px;
+    margin: 20px auto;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(120deg, #007aff, #0051ff); /* iOS-like blue gradient */
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Result Output --- */
+.result-output {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    white-space: pre-line;
+}
+
+/* --- Icon Grid for Home Page (Single Column Layout) --- */
+.icon-grid {
+    display: flex;
+    flex-direction: column; /* Aligns items in a single column */
+    align-items: center; /* Centers items horizontally */
+    gap: 15px; /* Space between items */
+    width: 100%;
+    max-width: 100%; /* Adjust as needed for a more centered look */
+    margin: 0 auto; /* Centers the column on the page */
+    font-size: 1rem; /*Ensures text is legible on mobile */
+}
+
+/* --- Icons as White Buttons with Accent Bar --- */
+.icon {
+    display: flex;
+    flex-direction: row; /* Stack content vertically inside button */
+    align-items: center;
+    justify-content: left;
+    text-align: left;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: #333;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+/* --- Ensure Icons Stay Fixed Size --- */
+.icon svg {
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0; /* Prevents resizing */
+}
+/* --- Hover Effects --- */
+.icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Accent Bar at the Top of Each Button --- */
+.icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px; /* Small accent bar */
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+/* --- Assigning Colors to Accent Bars --- */
+.icon-red::before { background: linear-gradient(90deg, #ffdddd, white); }
+.icon-orange::before { background: linear-gradient(90deg, #ffe6cc, white); }
+.icon-green::before { background: linear-gradient(90deg, #ddffdd, White); }
+.icon-purple::before { background: linear-gradient(90deg, #e6ccff, white); }
+.icon-blue::before { background: linear-gradient(90deg, #cce6ff, white); }
+
+/* --- Hover Effects --- */
+.icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Text Inside the Icons --- */
+.icon span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    padding: 0 20px;
+}
+
+.icon .subtext {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 4px;
+    line-height: 1.2;
+    padding: 0 20px;
+    word-wrap: break-word;
+    overflow-wrap:break-word;
+
+}
+
+/* --- Individual Calculator Styles --- */
+.HemmingCalculator,
+.MachineRecommender,
+.TonnageCalculator,
+.BoxBendingCalculator,
+.DaylightCalculator {
+    width: 90%;
+    max-width: 600px;
+    margin-top: 80px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Home Button --- */
+.home-button {
+    display: block;
+    margin: 40px auto;
+    width: fit-content;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(120deg, #da5252, #a72d2d);
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+
+    .icon {
+        max-width: 90%;
+    }
+
+    .result-output {
+        padding: 10px;
+    }
+}
+
+/* --- Machine Spec Guide Styles --- */
+.machine-spec-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+/* --- Toggle Switch --- */
+.unit-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #007aff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* --- Table Styling --- */
+.machine-spec-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+.machine-spec-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.machine-spec-table td:first-child {
+    font-weight: bold;
+}
+
+/* Mobile Optimization */
+@media (max-width: 600px) {
+    .machine-spec-container {
+        width: 90%;
+    }
+}
+
+.common-heights-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .common-heights-bubble-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .common-height-bubble {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border-radius: 12px;
+    background: #f9f9f9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+  }
+  
+  .bubble-label {
+    font-weight: regular;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .bubble-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .bubble {
+    display: inline-block;
+    background: #8ac1fc;
+    color: white;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .results-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    text-align: center;
+    padding: 15px;
+    border-radius: 12px;
+    background: #f9f9f9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+  }
+  
+  .result-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-width: 80px;
+  }
+  
+  .result-bubble {
+    background: #007aff; /* iOS-style blue */
+    color: white;
+    font-weight: bold;
+    padding: 10px 14px;
+    border-radius: 20px;
+    font-size: 16px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    min-width: 80px;
+    text-align: center;
+  }
+  
+  .result-label {
+    display: flex;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: #333;
+  }
+  
+  .interference {
+    background: #ff3b30; /* iOS-style red for "Yes" */
+  }
+  
+  /* iOS Style table */
+
+  .list-item span:first-child { /*Item titles*/
+    color: #6d6d72;
+  }
+  
+  .list-item span:last-child { /* Item values */
+    font-weight: regular;
+  }
+
+  .ios-style-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between sections */
+  }
+  
+  .section-header {
+    font-size: 14px;
+    text-align: center;
+    font-weight: regular;
+    color: #6d6d72;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .ios-style-section {
+    background: rgb(243, 243, 243);
+    border-radius: 12px; /* Rounded corners for the entire section */
+    overflow: hidden; /* Ensures corners apply properly */
+    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e5;
+  }
+  
+  /* Remove border from last item to keep it clean */
+  .ios-style-section .list-item:last-child {
+    border-bottom: none;
+  }
+  
+/* Rows for Width and Height in Robot Calculator */
+.input-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .input-row div {
+    flex: 1;
+    min-width: 0;
+  }
+  
