@@ -14,6 +14,7 @@ import RobotCycleTime from "./RobotCycleTime";
 import PartWeightCalculator from "./PartWeightCalculator";
 import InsideRadiusCalculator from "./InsideRadiusCalculator";
 import SuctionCupPicker from "./SuctionCupPicker";
+import RobotSpecGuide from "./RobotSpecGuide";
 
 const App: React.FC = () => (
     <UnitProvider>
@@ -31,6 +32,7 @@ const App: React.FC = () => (
                     <Route path="/InsideRadiusCalculator" element={<InsideRadiusCalculator />} />
                     <Route path="/part-weight-calculator" element={<PartWeightCalculator />} />
                     <Route path="/suction-cup-picker" element={<SuctionCupPicker />} />
+                    <Route path="/robot-spec-guide" element={<RobotSpecGuide />} />
                     <Route path="*" element={<div>404 - Page Not Found</div>} />
                 </Routes>
                 <Footer />

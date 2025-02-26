@@ -13,18 +13,18 @@ const quantityOptions = ["per week", "per month", "per year"];
 
 const robots = [
   { name: "Mitsubishi RV13", maxPayload: 10, maxBlankSize: [12, 24] },
-  { name: "Fanuc M20iD/25", maxPayload: 20, maxBlankSize: [24, 36] },
-  { name: "Fanuc M20iD/35", maxPayload: 30, maxBlankSize: [24, 36] },
-  { name: "Fanuc M710iC/70", maxPayload: 65, maxBlankSize: [48, 72] },
-  { name: "Fanuc R-2000iC/165R", maxPayload: 160, maxBlankSize: [60, 96] },
-  { name: "Fanuc R-2000iC/210R", maxPayload: 205, maxBlankSize: [72, 120] },
-  { name: "Fanuc R-2000iC/270R", maxPayload: 265, maxBlankSize: [84, 144] },
+  { name: "Fanuc M20iD/25", maxPayload: 25, maxBlankSize: [24, 36] },
+  { name: "Fanuc M20iD/35", maxPayload: 35, maxBlankSize: [24, 36] },
+  { name: "Fanuc M710iC/70", maxPayload: 70, maxBlankSize: [48, 72] },
+  { name: "Fanuc R-2000iC/165R", maxPayload: 165, maxBlankSize: [60, 96] },
+  { name: "Fanuc R-2000iC/210R", maxPayload: 210, maxBlankSize: [72, 120] },
+  { name: "Fanuc R-2000iC/270R", maxPayload: 270, maxBlankSize: [84, 144] },
 ];
 
 const weightMultipliers = [
   { maxWeight: 10, multiplier: 1 },
   { maxWeight: 25, multiplier: 1.1 },
-  { maxWeight: 35, multiplier: 1.2 },
+  { maxWeight: 35, multiplier: 1.1 },
   { maxWeight: 70, multiplier: 1.3 },
   { maxWeight: 165, multiplier: 1.4 },
   { maxWeight: 210, multiplier: 1.5 },
