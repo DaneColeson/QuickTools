@@ -6,7 +6,6 @@ import "../styles/App.css";
 type MaterialType =
   | "Mild Steel (60ksi)"
   | "Stainless Steel (90ksi)"
-  | "Stainless Steel (304)"
   | "Aluminum 5052 (33ksi)"
   | "Structural Steel (120ksi)"
   | "High Strength Steel (150ksi)";
@@ -16,9 +15,32 @@ const materialData: Record<MaterialType, { tensileStrength: number; percentage: 
   "Mild Steel (60ksi)": { tensileStrength: 60000, percentage: 0.16 },
   "Stainless Steel (90ksi)": { tensileStrength: 90000, percentage: 0.21 },
   "Aluminum 5052 (33ksi)": { tensileStrength: 33000, percentage: 0.10 },
-  "Stainless Steel (304)": { tensileStrength: 90000, percentage: 0.21 },
   "Structural Steel (120ksi)": { tensileStrength: 120000, percentage: 0.30 },
   "High Strength Steel (150ksi)": { tensileStrength: 150000, percentage: 0.30 }
+};
+
+const airBendChart: Record<number, number | string> = {
+  0.157: 0.026,
+  0.236: 0.039,
+  0.276: 0.046,
+  0.315: 0.052,
+  0.394: 0.066,
+  0.472: 0.079,
+  0.551: 0.092,
+  0.630: 0.105,
+  0.709: 0.118,
+  0.787: 0.131,
+  0.984: 0.164,
+  1.260: 0.210,
+  1.575: 0.626,
+  1.969: 0.328,
+  2.480: 0.413,
+  3.150: 0.525,
+  3.937: 0.656,
+  4.921: 0.820,
+  6.299: 1.050,
+  7.874: 1.312,
+  9.843: 1.640
 };
 
 // ✅ Thickness & V-Die Dropdown Options
@@ -45,75 +67,90 @@ const InsideRadiusCalculator: React.FC = () => {
       setResult("Please enter all required fields.");
       return;
     }
-
+  
     const materialProps = materialData[material];
     if (!materialProps) return;
-
-    // ✅ Convert values to inches for calculation
+  
+    // Convert values to inches for calculation
     const thicknessInInches = unit === "in" ? parseFloat(thickness) : parseFloat(thickness) / 25.4;
     const vDieWidthInInches = unit === "in" ? parseFloat(vDieWidth) : parseFloat(vDieWidth) / 25.4;
-    const punchTipRadiusInInches = punchTipRadius ? (unit === "in" ? punchTipRadius : (punchTipRadius as number) / 25.4) : "";
-
-    // ✅ Sharp Bend Minimum Limit (63% of thickness)
+    const punchTipRadiusInInches = punchTipRadius
+      ? unit === "in"
+        ? punchTipRadius
+        : (punchTipRadius as number) / 25.4
+      : "";
+  
+    // Sharp Bend Minimum Limit (63% of thickness)
     const sharpBendLimit = thicknessInInches * 0.63;
-
-    // ✅ Ensure punch tip is at least 63% of thickness
+  
+    // Ensure punch tip is at least 63% of thickness
     let adjustedPunchTip =
-    punchTipRadiusInInches !== ""
-    ? Math.max(punchTipRadiusInInches as number, sharpBendLimit)
-    : sharpBendLimit;
-
-    // ✅ Percentage Rule Estimate
+      punchTipRadiusInInches !== ""
+        ? Math.max(punchTipRadiusInInches as number, sharpBendLimit)
+        : sharpBendLimit;
+  
+    // Percentage Rule Estimate
     const percentageRadius = vDieWidthInInches * materialProps.percentage;
-
-    // ✅ Tensile Strength Formula Estimate
+  
+    // Tensile Strength Formula Estimate
     const dieWidthPercentage = (materialProps.tensileStrength / 60000) * 0.16;
     const tensileStrengthRadius = dieWidthPercentage * vDieWidthInInches;
-
-    // ✅ Final Inside Radius Calculation
+  
+    // Final Inside Radius Calculation
     let finalRadius = Math.max(
-    percentageRadius,
-    tensileStrengthRadius,
-    adjustedPunchTip // Default to tensile strength estimate
-);
-
-      // ✅ Enforce Sharp Bend Minimum If Punch Tip is Smaller
+      percentageRadius,
+      tensileStrengthRadius,
+      adjustedPunchTip
+    );
+  
+    // Enforce Sharp Bend Minimum If Punch Tip is Smaller
     if (punchTipRadiusInInches !== "" && punchTipRadiusInInches < sharpBendLimit) {
-    finalRadius = sharpBendLimit;
-  }
-
-    // ✅ Helper function to format based on unit
-const formatValue = (value: number) => (unit === "mm" ? value.toFixed(2) : value.toFixed(3));
-
-// ✅ Convert results back to user-selected unit
-const convertedFinalRadius = formatValue(finalRadius * conversionFactor);
-const convertedPercentageRadius = formatValue(percentageRadius * conversionFactor);
-const convertedTensileRadius = formatValue(tensileStrengthRadius * conversionFactor);
-const convertedSharpBendLimit = formatValue(sharpBendLimit * conversionFactor);
-
-setResult(
-  <div>
-    <div className="section-header">Results</div>
-    <div className="results-container">
-      <div className="result-item">
-        <span className="result-bubble">{convertedTensileRadius}</span>
-        <span className="result-label">Tensile Strength Estimate</span>
+      finalRadius = sharpBendLimit;
+    }
+  
+    // Air Bend Chart Lookup
+    const airBendResult =
+      airBendChart[vDieWidthInInches] !== undefined
+        ? airBendChart[vDieWidthInInches]
+        : "No Match";
+  
+    // Convert results back to user-selected unit
+    const formatValue = (value: number) => (unit === "mm" ? value.toFixed(2) : value.toFixed(3));
+  
+    const convertedFinalRadius = formatValue(finalRadius * conversionFactor);
+    const convertedPercentageRadius = formatValue(percentageRadius * conversionFactor);
+    const convertedTensileRadius = formatValue(tensileStrengthRadius * conversionFactor);
+    const convertedSharpBendLimit = formatValue(sharpBendLimit * conversionFactor);
+    const convertedAirBendResult = 
+      typeof airBendResult === "number" ? formatValue(airBendResult * conversionFactor) : airBendResult;
+  
+    setResult(
+      <div>
+        <div className="section-header">Results</div>
+        <div className="results-container">
+          <div className="result-item">
+            <span className="result-bubble">{convertedTensileRadius}</span>
+            <span className="result-label">Tensile Strength Estimate</span>
+          </div>
+          <div className="result-item">
+            <span className="result-bubble">{convertedPercentageRadius}</span>
+            <span className="result-label">% Rule Estimate</span>
+          </div>
+          <div className="result-item">
+            <span className="result-bubble">{convertedSharpBendLimit}</span>
+            <span className="result-label">Sharp Bend Limit</span>
+          </div>
+          <div className="result-item">
+            <span className="result-bubble">{convertedFinalRadius}</span>
+            <span className="result-label">Final Inside Radius</span>
+          </div>
+          <div className="result-item">
+            <span className="result-bubble">{convertedAirBendResult}</span>
+            <span className="result-label">Air Bend Chart Rule</span>
+          </div>
+        </div>
       </div>
-      <div className="result-item">
-        <span className="result-bubble">{convertedPercentageRadius}</span>
-        <span className="result-label">% Rule Estimate</span>
-      </div>
-      <div className="result-item">
-        <span className="result-bubble">{convertedSharpBendLimit}</span>
-        <span className="result-label">Sharp Bend Limit</span>
-      </div>
-      <div className="result-item">
-        <span className="result-bubble">{convertedFinalRadius}</span>
-        <span className="result-label">Final Inside Radius</span>
-      </div>
-    </div>
-  </div>
-);
+    );
   };
   
   useEffect(() => {

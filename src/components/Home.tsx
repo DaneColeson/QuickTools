@@ -20,7 +20,14 @@ const Home: React.FC = () => (
 {/* Main Content */}
 <main className="content">
     <div className="icon-grid">
-    <Link to="/box-bending" className="icon icon-red">
+    <Link to="/blank-development" className="icon icon-red">
+    <RadiusIcon width={50} height={50} />
+    <div className="icon-content">
+        <span>Blank Development</span>
+        <div className="subtext">Estimate Bend Allowance, Bend Deduction, Blank Size</div>
+    </div>
+</Link>
+<Link to="/box-bending" className="icon icon-red">
     <BoxIcon width={50} height={50} />
     <div className="icon-content">
         <span>Box Bending</span>
