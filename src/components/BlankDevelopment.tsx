@@ -24,7 +24,7 @@ const materialThicknessOptions = [
 ];
 
 const BlankDevelopmentCalculator = () => {
-  const [unit, setUnit] = useState("mm"); // Default unit is mm
+  const [unit, setUnit] = useState("in"); // Default unit is mm
   const conversionFactor = unit === "mm" ? 1 : 25.4;
   
   const [thickness, setThickness] = useState(materialThicknessOptions[0].mm);
@@ -43,7 +43,7 @@ const BlankDevelopmentCalculator = () => {
     const bendAllowance = ((0.017453 * insideRadiusInInches) + (0.0078 * thicknessInInches)) * bendAngle;
     const outsideSetback = Math.tan(radianAngle / 2) * (thicknessInInches + insideRadiusInInches);
     const bendDeduction = (outsideSetback * 2) - bendAllowance;
-    const finalBlankInches = legSumInInches + (bendDeduction * numBends);
+    const finalBlankInches = legSumInInches - (bendDeduction * numBends);
     
     const conversionBack = unit === "mm" ? 25.4 : 1;
     const decimalPlaces = unit === "mm" ? 2 : 3;

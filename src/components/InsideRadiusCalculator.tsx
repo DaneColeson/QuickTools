@@ -96,23 +96,27 @@ const InsideRadiusCalculator: React.FC = () => {
     const dieWidthPercentage = (materialProps.tensileStrength / 60000) * 0.16;
     const tensileStrengthRadius = dieWidthPercentage * vDieWidthInInches;
   
-    // Final Inside Radius Calculation
-    let finalRadius = Math.max(
-      percentageRadius,
-      tensileStrengthRadius,
-      adjustedPunchTip
-    );
-  
-    // Enforce Sharp Bend Minimum If Punch Tip is Smaller
-    if (punchTipRadiusInInches !== "" && punchTipRadiusInInches < sharpBendLimit) {
-      finalRadius = sharpBendLimit;
-    }
-  
     // Air Bend Chart Lookup
     const airBendResult =
       airBendChart[vDieWidthInInches] !== undefined
         ? airBendChart[vDieWidthInInches]
         : "No Match";
+  
+    // Determine Final Inside Radius
+    let finalRadius;
+    if (punchTipRadiusInInches !== "") {
+      // If user enters a punch tip, use it (with min limit)
+      finalRadius = adjustedPunchTip;
+    } else {
+      // If no punch tip is entered, take the average of available values
+      const validValues = [tensileStrengthRadius, percentageRadius];
+  
+      if (typeof airBendResult === "number") {
+        validValues.push(airBendResult);
+      }
+  
+      finalRadius = validValues.reduce((sum, val) => sum + val, 0) / validValues.length;
+    }
   
     // Convert results back to user-selected unit
     const formatValue = (value: number) => (unit === "mm" ? value.toFixed(2) : value.toFixed(3));
@@ -121,7 +125,7 @@ const InsideRadiusCalculator: React.FC = () => {
     const convertedPercentageRadius = formatValue(percentageRadius * conversionFactor);
     const convertedTensileRadius = formatValue(tensileStrengthRadius * conversionFactor);
     const convertedSharpBendLimit = formatValue(sharpBendLimit * conversionFactor);
-    const convertedAirBendResult = 
+    const convertedAirBendResult =
       typeof airBendResult === "number" ? formatValue(airBendResult * conversionFactor) : airBendResult;
   
     setResult(
@@ -141,12 +145,12 @@ const InsideRadiusCalculator: React.FC = () => {
             <span className="result-label">Sharp Bend Limit</span>
           </div>
           <div className="result-item">
-            <span className="result-bubble">{convertedFinalRadius}</span>
-            <span className="result-label">Final Inside Radius</span>
-          </div>
-          <div className="result-item">
             <span className="result-bubble">{convertedAirBendResult}</span>
             <span className="result-label">Air Bend Chart Rule</span>
+          </div>
+          <div className="result-item">
+            <span className="result-bubble">{convertedFinalRadius}</span>
+            <span className="result-label">Final Inside Radius</span>
           </div>
         </div>
       </div>

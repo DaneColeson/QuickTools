@@ -10,7 +10,7 @@ interface UnitContextType {
 const UnitContext = createContext<UnitContextType | undefined>(undefined);
 
 export const UnitProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [unit, setUnit] = useState<Unit>("mm");
+  const [unit, setUnit] = useState<Unit>("in");
 
   const toggleUnit = () => {
     setUnit((prevUnit) => (prevUnit === "mm" ? "in" : "mm")); // ✅ Properly toggles unit
