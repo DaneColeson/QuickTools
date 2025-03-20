@@ -1,20 +1,44 @@
 # Press Brake Quick Tools
 
-This is a collection of calculators for Press Brake Applications and Sales
+This is a collection of calculators for Press Brake Applications, Sales, and Customer reference.
 
 ## Project Structure
 
 ```
-my-react-app
-├── public
-│   ├── index.html         # Main HTML file
-│   └── manifest.json      # PWA metadata
-├── src
-│   ├── components
-│   │   └── App.tsx       # Main application component
-│   ├── index.tsx         # Entry point of the application
-│   └── styles
-│       └── App.css       # Styles for the App component
+src
+├── assets
+│   ├── BoxIcon.tsx
+│   ├── HemmingIcon.tsx
+│   ├── icon.ico
+│   ├── Icon.jpg
+│   ├── MachineRecommenderIcon.tsx
+│   ├── RadiusBend.tsx
+│   ├── RobotIcon.tsx
+│   ├── ScaleIcon.tsx
+│   └── SpecIcon.tsx
+├── components
+│   ├── App.tsx
+│   ├── BlankDevelopment.tsx
+│   ├── BoxBending.tsx
+│   ├── DaylightCalculator.tsx
+│   ├── Footer.css
+│   ├── Footer.tsx
+│   ├── HemmingCalculator.tsx
+│   ├── Home.tsx
+│   ├── InsideRadiusCalculator.tsx
+│   ├── MachineRecommender.tsx
+│   ├── MachineSpecGuide.tsx
+│   ├── PartWeightCalculator.tsx
+│   ├── RobotCycleTime.tsx
+│   ├── RobotSpecGuide.tsx
+│   ├── SuctionCupPicker.tsx
+│   ├── SuctionCupVisualizer.tsx
+│   ├── TonnageCalculator.tsx
+│   └── UnitContext.tsx
+├── index.tsx
+├── react-app-env.d.ts
+└── styles
+    └── App.css
 ├── package.json           # npm configuration
 ├── tsconfig.json          # TypeScript configuration
 └── README.md              # Project documentation
@@ -54,3 +78,4 @@ To get started with this project, follow these steps:
 ## License
 
 This project is licensed under the MIT License.
+
