@@ -1,8 +1,0 @@
-/*"start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
-    "test": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts test",*/
-
-
-    git filter-branch --force --index-filter \
-'git rm --cached --ignore-unmatch dist/win-unpacked/Quick Tools.exe dist/win-unpacked/resources/app.asar'
---prune-empty --tag-name-filter cat -- --all
